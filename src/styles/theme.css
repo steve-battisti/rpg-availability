@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+/*
+ * Mars Funk (option 1b) — see design/mars-funk/README.md.
+ *
+ * Fidelity is high by instruction: every hex below is copied from the spec, not
+ * chosen. If a value here disagrees with that README, the README wins.
+ *
+ * Two rules the design is built on, worth stating where they cannot be missed:
+ *   1. NEVER RED. "Unavailable" is a neutral rust-brown and the heat scale stays
+ *      in the green family. This is the red/green colorblindness mitigation, not
+ *      a stylistic preference.
+ *   2. The rust accent is chrome only — brand, borders, headers. It never
+ *      encodes a person's availability.
+ */
+
+/* Theme is toggled by a class on <html>, not by the media query alone, so the
+   user's explicit choice can override their OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+
+  --rpg-bg: #fbf3e6;
+  --rpg-surface: #fff9ef;
+  --rpg-ink: #2b1b12;
+  --rpg-ink-muted: #8a6b52;
+  --rpg-border: #e4d2b4;
+  --rpg-accent: #c1502e;
+
+  --rpg-available-bg: #dfe8c4;
+  --rpg-available-ink: #4b6b1e;
+  --rpg-unavailable-bg: #e4d9d6;
+  --rpg-unavailable-ink: #6b5049;
+  --rpg-maybe-bg: #f6dfa8;
+  --rpg-maybe-ink: #8a5a12;
+  --rpg-unset-bg: transparent;
+  --rpg-unset-ink: #a98f6e;
+  --rpg-unset-border: #e4d2b4;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --rpg-bg: #1b1023;
+  --rpg-surface: #241531;
+  --rpg-ink: #f5e8d8;
+  --rpg-ink-muted: #b39d8e;
+  --rpg-border: #3a2740;
+  --rpg-accent: #e2673f;
+
+  --rpg-available-bg: #33421c;
+  --rpg-available-ink: #b9d98a;
+  --rpg-unavailable-bg: #3a2c28;
+  --rpg-unavailable-ink: #c9a89e;
+  --rpg-maybe-bg: #4a3714;
+  --rpg-maybe-ink: #f0c46a;
+  --rpg-unset-bg: transparent;
+  --rpg-unset-ink: #8a715a;
+  --rpg-unset-border: #3a2740;
+}
+
+@theme inline {
+  --color-bg: var(--rpg-bg);
+  --color-surface: var(--rpg-surface);
+  --color-ink: var(--rpg-ink);
+  --color-ink-muted: var(--rpg-ink-muted);
+  --color-border: var(--rpg-border);
+  --color-accent: var(--rpg-accent);
+
+  --color-available: var(--rpg-available-bg);
+  --color-available-ink: var(--rpg-available-ink);
+  --color-unavailable: var(--rpg-unavailable-bg);
+  --color-unavailable-ink: var(--rpg-unavailable-ink);
+  --color-maybe: var(--rpg-maybe-bg);
+  --color-maybe-ink: var(--rpg-maybe-ink);
+  --color-unset: var(--rpg-unset-bg);
+  --color-unset-ink: var(--rpg-unset-ink);
+  --color-unset-border: var(--rpg-unset-border);
+
+  /* Bungee has no fallback with comparable weight, so the stack leans heavy to
+     keep the layout from reflowing dramatically before the webfont lands. */
+  --font-display: 'Bungee', 'Arial Black', 'Helvetica Neue', system-ui, sans-serif;
+  --font-body: 'Karla', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* The design's chunky-poster radii and borders. */
+  --radius-cell: 10px;
+  --radius-pill: 12px;
+  --radius-card: 24px;
+}
+
+body {
+  margin: 0;
+  background: var(--rpg-bg);
+  color: var(--rpg-ink);
+  font-family: var(--font-body);
+  /* Respect the notch on a phone; this app is used one-handed. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* The design's date cells are tap targets first. Never let a browser's default
+   touch delay or highlight make a sweep through a month feel laggy. */
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

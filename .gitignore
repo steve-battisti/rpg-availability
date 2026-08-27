@@ -11,3 +11,7 @@ dist/
 
 # Design source bundle — extracted contents are committed alongside it
 design/**/design_handoff_*.zip
+
+# Screenshot output from `npm run shot`
+.shots/
+dist/
