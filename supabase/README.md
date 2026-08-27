@@ -1,50 +1,35 @@
 # Supabase setup
 
-**Status: written, not yet run against a live project.** The SQL and the edge
-function are unverified — no Supabase project existed at the time of writing.
-Everything that *could* be checked locally has been (the seed matches the roster
-constant, RLS is enabled on every table, no client write policy exists on
-`members`), but the first `db push` is where the real verification happens.
+Project: **`nwiszvzmvhygwxnqqgtz`** — https://nwiszvzmvhygwxnqqgtz.supabase.co
 
-## One-time setup
+**Status: schema and function written, not yet applied.** Everything that could
+be checked without a database has been (the seed matches the roster constant,
+RLS is enabled on every table, no client write policy exists on `members`), but
+the first `db push` is where the real verification happens.
 
-1. Create a project at supabase.com. Note the project ref.
+## Setup
 
-2. **Enable anonymous sign-ins.** Authentication → Providers → Anonymous.
-   Nothing works without this — it is the whole identity model.
-
-3. Apply the schema:
+Log in once, so the CLI has a token:
 
 ```bash
-npx supabase link --project-ref YOUR-PROJECT-REF
+npx supabase login
 ```
+
+Then run everything else in one go, with the real passcode in place of `1234`:
 
 ```bash
-npx supabase db push
+./scripts/setup-supabase.sh 1234
 ```
 
-4. Choose the band passcode and store its hash as a secret. Pick any random
-   salt; only the hash and the salt are ever stored, and neither reaches the
-   browser.
+That links the project, pushes the schema, enables anonymous sign-ins, salts and
+hashes the passcode into an edge function secret, and deploys `claim-member`. It
+is idempotent — safe to re-run.
 
-```bash
-SALT=$(openssl rand -hex 16); printf 'salt: %s\nhash: %s\n' "$SALT" "$(printf '%s' "1234$SALT" | sha256sum | cut -d' ' -f1)"
-```
+The passcode never leaves the machine you run it on. Only a salted SHA-256 is
+stored, and neither the hash nor the salt reaches the browser.
 
-Replace `1234` with the real passcode, then set both values:
-
-```bash
-npx supabase secrets set BAND_PASSCODE_SALT=THE-SALT BAND_PASSCODE_SHA256=THE-HASH
-```
-
-5. Deploy the claim function:
-
-```bash
-npx supabase functions deploy claim-member
-```
-
-6. Copy `.env.example` to `.env.local` and fill in the project URL and anon key
-   from Project Settings → API.
+Last step, by hand: put the anon key in `.env.local` from
+Project Settings → API → **anon public**.
 
 ## How the permission model actually works
 
