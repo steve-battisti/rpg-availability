@@ -14,6 +14,17 @@ Re-run that check any time the schema or the function changes:
 npm run verify:supabase
 ```
 
+One check is optional: realtime delivery needs a service-role key to write a row
+the anonymous session can then observe. It is skipped, loudly, without one:
+
+```bash
+SUPABASE_SERVICE_ROLE_KEY=... npm run verify:supabase
+```
+
+Worth running after any migration. Adding a table to the `supabase_realtime`
+publication is easy to forget, and a subscription to an unpublished table
+succeeds and then stays silent forever.
+
 ## Setup
 
 Log in once, so the CLI has a token:

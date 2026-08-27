@@ -11,11 +11,13 @@ import { useMemo, useState } from 'react';
 import { today as readToday } from './lib/clock';
 import { monthOf, type YearMonth } from './lib/month';
 import { useBandData } from './data/useBandData';
+import { signOut } from './data/session';
 import { BestDatesScreen } from './screens/BestDatesScreen';
 import { EntryScreen } from './screens/EntryScreen';
 import { MarkScreen } from './screens/MarkScreen';
 import { ReportScreen } from './screens/ReportScreen';
 import { Card } from './ui/Card';
+import { SessionFooter } from './ui/SessionFooter';
 import { ThemeToggle } from './ui/ThemeToggle';
 import { useTheme } from './theme/useTheme';
 
@@ -132,10 +134,18 @@ export function App() {
             />
           ) : null}
 
-          <p className="pb-2 text-center font-body text-[11px] text-ink-muted">
-            Signed in as {band.me.name}
-            {band.me.isAdmin ? ' · Admin' : ''}
-          </p>
+          <SessionFooter
+            name={band.me.name}
+            isAdmin={band.me.isAdmin}
+            onSignOut={() => {
+              void signOut().then(() => {
+                // A full reload is the honest reset: it drops every cached
+                // mark, the visible month and the tab along with the session,
+                // so nothing from the previous member can linger on screen.
+                location.reload();
+              });
+            }}
+          />
         </>
       )}
     </div>

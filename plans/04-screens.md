@@ -131,6 +131,35 @@ returns a genuine 403 and reads "That code isn't right."
 Also fixed: the code field is focused on load, so typing works without tapping
 first.
 
+### Two bugs found by auditing what was left — 2026-08-27
+
+Both were found by asking what remained rather than by anything failing.
+
+**Realtime never fired.** `watchAvailability` subscribed to `postgres_changes`
+on `availability`, but the table was never added to the `supabase_realtime`
+publication. Postgres publishes nothing for an unpublished table, so the
+subscription reported SUBSCRIBED and then sat silent forever — a failure mode
+with no error anywhere. Fixed by `0002_realtime.sql`.
+
+Worth recording: the first verification **after** that migration still showed no
+events. The table was correctly in the publication; Realtime's cache was stale.
+It passed on the next attempt. Had I trusted the first result I would have gone
+looking for a second bug that did not exist.
+
+**No way out of a wrong name.** Six people share one passcode and pick from a row
+of six names, so somebody was going to tap the wrong one — and would then have
+been that person on that phone permanently, marking someone else's calendar, with
+no recourse short of clearing site data. `SessionFooter` adds "Not you?", behind
+a confirmation, because signing out costs re-entering the passcode and that is a
+mean thing to inflict on a mis-tap.
+
+Signing out leaves `members.claimed_by` pointing at the dead session. That is
+harmless — claiming overwrites whoever held the row — and releasing it properly
+would need the edge function for no gain.
+
+`verify:supabase` now covers realtime delivery, gated on a service-role key and
+skipped loudly without one. **10/10 checks pass.**
+
 ### Still owed
 
 - **T1–T9 in `TestScript.md` have not been run.** They need a real phone and, for

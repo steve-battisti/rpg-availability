@@ -156,6 +156,45 @@ check(
   unknownStatus ? `HTTP ${unknownStatus}` : 'accepted an unknown member',
 );
 
+// --- 9. realtime actually delivers (optional) -------------------------------
+// Needs a service-role key to write a row the anon session can then observe.
+// Skipped without one rather than silently not testing: adding the table to the
+// publication is the step that was missed the first time, and a subscription to
+// an unpublished table succeeds and then stays silent forever.
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!serviceKey) {
+  console.log('  skip  realtime delivery — set SUPABASE_SERVICE_ROLE_KEY to check this');
+} else {
+  const service = createClient(url, serviceKey, { auth: { persistSession: false } });
+  const seen = [];
+  const channel = supabase
+    .channel('verify-realtime')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'availability' }, (p) =>
+      seen.push(p.eventType),
+    );
+  const subscribed = await new Promise((resolve) => {
+    channel.subscribe((s) => {
+      if (s === 'SUBSCRIBED') resolve(true);
+      if (s === 'CHANNEL_ERROR' || s === 'TIMED_OUT') resolve(false);
+    });
+    setTimeout(() => resolve(false), 20000);
+  });
+
+  const PROBE_DAY = '2031-01-01'; // far future; cannot collide with real data
+  if (subscribed) {
+    await service.from('availability').upsert({ member_id: 'jt', day: PROBE_DAY, status: 'available' });
+    await new Promise((r) => setTimeout(r, 6000));
+  }
+  await service.from('availability').delete().eq('member_id', 'jt').eq('day', PROBE_DAY);
+  await supabase.removeChannel(channel);
+
+  check(
+    'realtime delivers availability changes',
+    subscribed && seen.length > 0,
+    subscribed ? `events: ${seen.join(', ') || 'NONE — is the table in supabase_realtime?'}` : 'could not subscribe',
+  );
+}
+
 await supabase.auth.signOut();
 
 const failed = results.filter((r) => !r.pass);

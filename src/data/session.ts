@@ -107,3 +107,15 @@ export async function claimMember(passcode: string, memberId: MemberId): Promise
   if (!member) return { ok: false, reason: 'server_error' };
   return { ok: true, member };
 }
+
+/**
+ * Forget who this browser is.
+ *
+ * The member row keeps its `claimed_by` pointing at the now-dead session, which
+ * is harmless: claiming overwrites whoever held it, so re-claiming from a fresh
+ * session just takes it back. Releasing it properly would need the edge
+ * function, and buys nothing.
+ */
+export async function signOut(): Promise<void> {
+  await supabase.auth.signOut();
+}
