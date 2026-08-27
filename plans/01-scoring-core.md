@@ -86,6 +86,7 @@ half a person.
 
 ### Still owed
 
-- Vite + React + Tailwind app shell, pending the chosen visual direction.
-- Supabase schema, RLS policies, and the anonymous-session claim flow.
-- `plans/02-*` once Claude Design comes back.
+Nothing. Everything this plan deferred has since landed: the app shell and theme
+(plan 02), the Supabase data layer (plan 03), and the four screens (plan 04).
+The scoring core itself is unchanged since it shipped — the screens consume
+`tallyDay`, `tallyRange` and `rankBestDates` exactly as written here.

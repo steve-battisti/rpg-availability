@@ -83,6 +83,10 @@
   --font-display: 'Bungee', 'Arial Black', 'Helvetica Neue', system-ui, sans-serif;
   --font-body: 'Karla', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
+  /* The design specifies desktop at 1040px, not a framework default, so it is
+     a named breakpoint rather than an approximation. */
+  --breakpoint-desk: 1040px;
+
   /* The design's chunky-poster radii and borders. */
   --radius-cell: 10px;
   --radius-pill: 12px;

@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "shot": "BUILD_PREVIEW=1 vite build && node scripts/shot.mjs",
     "verify:supabase": "node scripts/verify-supabase.mjs",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=rpg-availability --branch=main --commit-dirty=true"
+    "deploy": "npm run typecheck && npm run test && npm run build && wrangler pages deploy dist --project-name=rpg-availability --branch=main --commit-dirty=true"
   },
   "repository": {
     "type": "git",

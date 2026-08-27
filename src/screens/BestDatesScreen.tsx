@@ -102,11 +102,13 @@ export function BestDatesScreen({
   index,
   theme,
   today,
+  className = '',
 }: {
   roster: readonly Member[];
   index: AvailabilityIndex;
   theme: Theme;
   today: Day;
+  className?: string;
 }) {
   const best: BestDates = useMemo(
     () => rankBestDates({ roster, index, today, limit: LIMIT }),
@@ -114,7 +116,7 @@ export function BestDatesScreen({
   );
 
   return (
-    <Card>
+    <Card className={className}>
       <h2 className="font-display text-[16px] text-accent">BEST DATES</h2>
       <p className="mt-1 font-body text-[10.5px] text-ink-muted">
         Next six months, best first. A maybe counts as half.

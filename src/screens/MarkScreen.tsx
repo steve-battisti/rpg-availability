@@ -19,6 +19,7 @@ import {
   monthDays,
   monthGrid,
   monthLabel,
+  monthLabelLong,
   shiftMonth,
 } from '../lib/month';
 import { Card } from '../ui/Card';
@@ -99,24 +100,58 @@ export function MarkScreen({
 
   return (
     <Card>
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          aria-label="Previous month"
-          className="min-h-11 px-2 font-display text-[16px] text-accent"
-          onClick={() => onMonthChange(shiftMonth(visibleMonth, -1))}
-        >
-          ‹
-        </button>
-        <h2 className="font-display text-[16px] text-accent">{monthLabel(visibleMonth)}</h2>
-        <button
-          type="button"
-          aria-label="Next month"
-          className="min-h-11 px-2 font-display text-[16px] text-accent"
-          onClick={() => onMonthChange(shiftMonth(visibleMonth, 1))}
-        >
-          ›
-        </button>
+      {/*
+        Desktop puts the month nav and the two actions on one line, as the
+        desktop artboard draws them. On mobile they stack, which also brings the
+        action buttons directly under the month nav the way the mobile artboard
+        has them.
+      */}
+      <div className="desk:flex desk:items-center desk:justify-between desk:gap-4">
+        <div className="flex items-center justify-between desk:justify-start desk:gap-1">
+          <button
+            type="button"
+            aria-label="Previous month"
+            className="min-h-11 px-2 font-display text-[16px] text-accent desk:text-[22px]"
+            onClick={() => onMonthChange(shiftMonth(visibleMonth, -1))}
+          >
+            ‹
+          </button>
+          <h2 className="font-display text-[16px] text-accent desk:text-[22px]">
+            <span className="desk:hidden">{monthLabel(visibleMonth)}</span>
+            <span className="hidden desk:inline">
+              {monthLabelLong(visibleMonth)} — {target.id === me.id ? 'MY AVAILABILITY' : `${target.name.toUpperCase()}'S AVAILABILITY`}
+            </span>
+          </h2>
+          <button
+            type="button"
+            aria-label="Next month"
+            className="min-h-11 px-2 font-display text-[16px] text-accent desk:text-[22px]"
+            onClick={() => onMonthChange(shiftMonth(visibleMonth, 1))}
+          >
+            ›
+          </button>
+        </div>
+
+        <div className="mt-3 flex gap-2 desk:mt-0 desk:shrink-0">
+          <PillButton
+            tone="available"
+            className="flex-1 desk:flex-none desk:px-3.5 desk:py-3"
+            onClick={markRestFree}
+            disabled={restFreeCount === 0}
+          >
+            Mark rest of month free
+          </PillButton>
+          <PillButton
+            className="desk:px-3.5 desk:py-3"
+            onClick={() => {
+              setBulkMode((on) => !on);
+              setSelection(new Set());
+            }}
+            aria-pressed={bulkMode}
+          >
+            {bulkMode ? 'Done' : 'Select multiple'}
+          </PillButton>
+        </div>
       </div>
 
       {editable.length > 1 ? (
@@ -150,26 +185,6 @@ export function MarkScreen({
         </div>
       ) : null}
 
-      <div className="mt-3 flex gap-2">
-        <PillButton
-          tone="available"
-          className="flex-1"
-          onClick={markRestFree}
-          disabled={restFreeCount === 0}
-        >
-          Mark rest of month free
-        </PillButton>
-        <PillButton
-          onClick={() => {
-            setBulkMode((on) => !on);
-            setSelection(new Set());
-          }}
-          aria-pressed={bulkMode}
-        >
-          {bulkMode ? 'Done' : 'Select multiple'}
-        </PillButton>
-      </div>
-
       {bulkMode ? (
         <div className="mt-2 flex items-center gap-2">
           <span className="font-body text-[12px] font-bold text-ink-muted">
@@ -192,7 +207,7 @@ export function MarkScreen({
         </div>
       ) : null}
 
-      <div className="mt-4 grid grid-cols-7 gap-[5px]">
+      <div className="mt-4 grid grid-cols-7 gap-[5px] desk:gap-[9px]">
         {WEEKDAY_HEADINGS.map((heading) => (
           <div key={heading} className="text-center font-display text-[10px] text-ink-muted">
             {heading}
@@ -200,7 +215,7 @@ export function MarkScreen({
         ))}
       </div>
 
-      <div className="mt-1.5 grid grid-cols-7 gap-[5px]">
+      <div className="mt-1.5 grid grid-cols-7 gap-[5px] desk:gap-[9px]">
         {grid.flat().map((day, i) => {
           if (!day) return <div key={`blank-${i}`} aria-hidden="true" />;
           const state = stateOf(day);
@@ -213,14 +228,14 @@ export function MarkScreen({
               onClick={() => tapCell(day)}
               aria-label={`${day} — ${meta.label}`}
               aria-pressed={bulkMode ? selected : undefined}
-              className={`relative aspect-square rounded-[10px] border-2 ${meta.className} ${
+              className={`relative aspect-square rounded-[10px] border-2 desk:aspect-auto desk:h-[66px] desk:rounded-[14px] ${meta.className} ${
                 selected ? 'outline-2 outline-offset-1 outline-accent' : ''
               } ${day === today ? 'ring-1 ring-accent ring-inset' : ''}`}
             >
               <span className="absolute top-0.5 left-1 font-body text-[9px] text-ink-muted">
                 {dayNumber(day)}
               </span>
-              <span className="font-display text-[16px]" aria-hidden="true">
+              <span className="font-display text-[16px] desk:text-[22px]" aria-hidden="true">
                 {meta.glyph}
               </span>
             </button>

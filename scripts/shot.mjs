@@ -26,10 +26,18 @@ const server = await preview({ preview: { port: PORT, strictPort: true } });
 const browser = await chromium.launch();
 
 try {
-  for (const theme of ['light', 'dark']) {
+  // 390 is the design's mobile target; 1040 is its stated desktop breakpoint.
+  const SIZES = [
+    { name: 'mobile', width: 390, height: 900, scale: 2 },
+    { name: 'desktop', width: 1040, height: 900, scale: 1 },
+  ];
+
+  for (const { theme, size } of ['light', 'dark'].flatMap((theme) =>
+    SIZES.map((size) => ({ theme, size })),
+  )) {
     const page = await browser.newPage({
-      viewport: { width: 390, height: 900 },
-      deviceScaleFactor: 2,
+      viewport: { width: size.width, height: size.height },
+      deviceScaleFactor: size.scale,
     });
     await page.goto(`http://localhost:${PORT}/preview.html`, { waitUntil: 'networkidle' });
     if (theme === 'dark') {
@@ -40,9 +48,10 @@ try {
     // Bungee is a heavy display face; without this the shot catches the fallback.
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(400);
-    await page.screenshot({ path: `${OUT}/proof-${theme}.png`, fullPage: true });
+    const file = `${OUT}/proof-${size.name}-${theme}.png`;
+    await page.screenshot({ path: file, fullPage: true });
     await page.close();
-    console.log(`${OUT}/proof-${theme}.png`);
+    console.log(file);
   }
 } finally {
   await browser.close();

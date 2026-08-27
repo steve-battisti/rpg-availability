@@ -121,6 +121,11 @@ checked without a human opening a browser.
 
 ### Still owed
 
-- Plan 03 — Supabase schema, RLS, and the claim flow.
-- Plan 04 — the four real screens, including the admin "viewing as" switcher
-  that the design does not cover.
+Nothing. Plan 03 (Supabase schema, RLS, claim flow) and plan 04 (the four
+screens, including the admin "viewing as" switcher this plan flagged as missing
+from the design) have both shipped.
+
+One thing this plan built has since been replaced: `src/App.tsx` was a throwaway
+token gallery, and plan 04 turned it into the real shell. The gallery's job —
+checking the tokens and heat ramp against the design without a live session —
+now belongs to `preview.html`.

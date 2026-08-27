@@ -27,3 +27,15 @@ status now maps to `unreachable` with its own message.
 `claim_attempts` table had *no row at all* for the user's attempt — not even a
 failure — which proved the function never ran and ruled out the entire
 passcode/claim path in one query. Log the attempt, not just the outcome.
+
+## A piped command cannot gate anything — 2026-08-27
+
+Ran `npm test 2>&1 | tail -4 && npm run deploy`. Two tests failed and it deployed
+anyway: in a pipeline the shell reports `tail`'s exit status, not the test
+runner's, so `&&` saw success. The truncation also threw away the names of the
+two failures, which then could not be reproduced.
+
+**Rule:** never gate a consequential action on a piped command. Put the gate
+inside the script instead — `npm run deploy` now runs `typecheck && test &&
+build` before it uploads anything, so the chain cannot be bypassed by how it
+happens to be invoked from a shell.

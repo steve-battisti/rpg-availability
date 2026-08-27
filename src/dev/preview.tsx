@@ -40,7 +40,7 @@ function Preview() {
   }
 
   return (
-    <div className="mx-auto flex max-w-[430px] flex-col gap-3 p-4">
+    <div className="mx-auto flex max-w-[430px] flex-col gap-3 p-4 desk:max-w-[1040px]">
       <header className="flex items-start justify-between gap-3">
         <h1 className="font-display text-[22px] leading-tight text-accent">
           RED PLANET
@@ -71,7 +71,14 @@ function Preview() {
         theme={theme}
         today={TODAY}
       />
-      <BestDatesScreen roster={ROSTER} index={index} theme={theme} today={TODAY} />
+      {/* Same width cap the app applies, so this page shows what ships. */}
+      <BestDatesScreen
+        className="desk:mx-auto desk:max-w-[560px]"
+        roster={ROSTER}
+        index={index}
+        theme={theme}
+        today={TODAY}
+      />
     </div>
   );
 }

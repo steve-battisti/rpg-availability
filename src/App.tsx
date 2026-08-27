@@ -40,7 +40,7 @@ export function App() {
   const band = useBandData(visibleMonth, today);
 
   return (
-    <div className="mx-auto flex max-w-[430px] flex-col gap-3 p-4">
+    <div className="mx-auto flex max-w-[430px] flex-col gap-3 p-4 desk:max-w-[1040px]">
       {/*
         The Entry screen carries the wordmark inside its own card, as the design
         draws it. Repeating it in the shell header would show it twice on the one
@@ -126,7 +126,11 @@ export function App() {
           ) : null}
 
           {tab === 'best' ? (
+            /* The design draws Best Dates at mobile width only; stretching a
+               list of six cards across 1040px would only make it harder to
+               read aloud, which is the screen's whole job. */
             <BestDatesScreen
+              className="desk:mx-auto desk:max-w-[560px]"
               roster={band.roster}
               index={band.index}
               theme={theme}

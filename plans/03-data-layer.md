@@ -115,5 +115,18 @@ and the file says so, so nobody later mistakes it for the lock.
 
 ### Still owed
 
-- Plan 04 — the four screens, plus the admin "viewing as" switcher, which the
-  Mars Funk design does not cover and which `editableMembers` now supports.
+Nothing outstanding from this plan, but two defects in what it shipped were found
+later and are worth recording here, next to the code they belong to:
+
+- **CORS was incomplete.** The claim function allowed only
+  `authorization, content-type`; supabase-js also sends `x-client-info` and
+  `apikey`, so browser preflight was rejected and no claim could ever succeed
+  from a real browser. Fixed, and `verify:supabase` now performs a genuine
+  preflight with the browser's header set. See `tasks/lessons.md`.
+- **Realtime was never published.** `availability` was missing from the
+  `supabase_realtime` publication, so the subscription this plan shipped
+  reported SUBSCRIBED and then stayed silent forever. Fixed by
+  `supabase/migrations/0002_realtime.sql`, with delivery now checked live.
+
+Both shared a shape: the verification passed while the feature was broken,
+because the check did not exercise the layer that was failing.

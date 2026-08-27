@@ -19,10 +19,12 @@ import {
   longDateLabel,
   monthGrid,
   monthLabel,
+  monthLabelLong,
   shiftMonth,
   todayOrFirstOfMonth,
 } from '../lib/month';
 import { Card } from '../ui/Card';
+import { HeatLegend } from '../ui/HeatLegend';
 import { MemberRow } from '../ui/MemberRow';
 import { toCellState } from '../ui/status';
 
@@ -59,8 +61,9 @@ export function ReportScreen({
         >
           ‹
         </button>
-        <h2 className="font-display text-[16px] text-accent">
-          {monthLabel(visibleMonth)} — CREW
+        <h2 className="font-display text-[16px] text-accent desk:text-[22px]">
+          <span className="desk:hidden">{monthLabel(visibleMonth)} — CREW</span>
+          <span className="hidden desk:inline">{monthLabelLong(visibleMonth)} — CREW</span>
         </h2>
         <button
           type="button"
@@ -72,7 +75,14 @@ export function ReportScreen({
         </button>
       </div>
 
-      <div className="mt-4 grid grid-cols-7 gap-[5px]">
+      {/*
+        Desktop is two columns: the heat grid, and a fixed 230px rail carrying
+        the selected date and an explicit legend. On mobile the rail is simply
+        the content below the grid, which is what the mobile artboard shows.
+      */}
+      <div className="desk:flex desk:items-start desk:gap-5">
+      <div className="desk:min-w-0 desk:flex-1">
+      <div className="mt-4 grid grid-cols-7 gap-[5px] desk:gap-[9px]">
         {WEEKDAY_HEADINGS.map((heading) => (
           <div key={heading} className="text-center font-display text-[10px] text-ink-muted">
             {heading}
@@ -80,7 +90,7 @@ export function ReportScreen({
         ))}
       </div>
 
-      <div className="mt-1.5 grid grid-cols-7 gap-[5px]">
+      <div className="mt-1.5 grid grid-cols-7 gap-[5px] desk:gap-[9px]">
         {grid.flat().map((day, i) => {
           if (!day) return <div key={`blank-${i}`} aria-hidden="true" />;
           const tally = tallyDay(day, roster, index);
@@ -96,7 +106,7 @@ export function ReportScreen({
               aria-label={`${day} — ${formatScore(tally.score)} of ${roster.length} available${
                 tally.unknownCount > 0 ? `, ${tally.unknownCount} not answered` : ''
               }`}
-              className={`relative aspect-square rounded-[10px] border-2 ${
+              className={`relative aspect-square rounded-[10px] border-2 desk:aspect-auto desk:h-[82px] desk:rounded-[14px] ${
                 isSelected ? 'border-accent' : 'border-border'
               }`}
               style={style}
@@ -112,7 +122,7 @@ export function ReportScreen({
                   {silentTag}
                 </span>
               ) : null}
-              <span className="font-display text-[13px]" aria-hidden="true">
+              <span className="font-display text-[13px] desk:text-[20px]" aria-hidden="true">
                 {formatScore(tally.score)}
               </span>
             </button>
@@ -120,7 +130,10 @@ export function ReportScreen({
         })}
       </div>
 
-      <div className="mt-4 border-t-2 border-border pt-4">
+      </div>
+
+      <aside className="mt-4 border-t-2 border-border pt-4 desk:mt-0 desk:w-[230px] desk:shrink-0 desk:border-t-0 desk:border-l-2 desk:pt-4 desk:pl-5">
+      <div>
         <h3 className="font-display text-[15px] text-accent">
           {longDateLabel(selectedInMonth)}
         </h3>
@@ -140,10 +153,16 @@ export function ReportScreen({
         ) : null}
       </div>
 
-      <div className="mt-4 border-t-2 border-border pt-3">
+      <div className="mt-4 border-t-2 border-border pt-3 desk:hidden">
         <p className="font-body text-[10.5px] text-ink-muted">
           Darker green = more of the band free. Hatched = someone hasn&rsquo;t answered.
         </p>
+      </div>
+
+      <div className="mt-5 hidden desk:block">
+        <HeatLegend theme={theme} bandSize={roster.length} />
+      </div>
+      </aside>
       </div>
     </Card>
   );

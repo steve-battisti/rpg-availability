@@ -160,10 +160,43 @@ would need the edge function for no gain.
 `verify:supabase` now covers realtime delivery, gated on a service-role key and
 skipped loudly without one. **10/10 checks pass.**
 
+### Desktop layout — 2026-08-27
+
+The design's desktop breakpoint is 1040px, so it is a named token
+(`--breakpoint-desk`) rather than a framework default rounded to 1024.
+
+- **Availability Report** is now two columns above 1040px: the heat grid, and a
+  fixed 230px rail with a left border carrying the selected-date detail and an
+  explicit `HeatLegend` — seven swatches, each drawn hatched, because the ramp
+  reads intuitively on its own but "diagonal lines mean somebody has not
+  answered" does not. Cells go to 82px tall with a 20px score numeral.
+- **Mark Availability** puts the month nav and both actions on one line, with
+  the long month label and the name of whose calendar is open. Cells 66px tall,
+  9px gaps, 22px glyphs.
+- **Best Dates stays at mobile width**, centred. The design draws it at 390 only,
+  and stretching six cards across 1040px would make it harder to read aloud —
+  which is the entire job of that screen.
+
+Mobile is unchanged except for one improvement the desktop work surfaced: the
+action buttons now sit directly under the month nav, which is what the mobile
+artboard shows and what the previous build had wrong.
+
+`npm run shot` now captures four images — mobile and desktop, light and dark.
+
+### A flake and a process failure
+
+One `npm test` run showed 2 failures. They could not be reproduced in eight
+subsequent runs, including under deliberate load; that run took 23.8s of test
+time against a normal 9.2s, so it was resource contention with a concurrent
+build. `testTimeout` is now 20s so a busy machine does not masquerade as a bug.
+
+The worse problem was mine: I gated the deploy on `npm test 2>&1 | tail -4 &&
+npm run deploy`. A pipeline reports `tail`'s exit status, so it deployed with
+failing tests, and the truncation discarded the names of the two failures.
+`npm run deploy` now runs `typecheck && test && build` itself, so the gate
+cannot be bypassed by how it is invoked. Recorded in `tasks/lessons.md`.
+
 ### Still owed
 
 - **T1–T9 in `TestScript.md` have not been run.** They need a real phone and, for
   T4, two of them. T8's colourblind check is the one I would not skip.
-- The design specifies desktop layouts for the two calendar screens; only the
-  mobile layout is built. It scales acceptably but is not the two-column desktop
-  report from the spec.
