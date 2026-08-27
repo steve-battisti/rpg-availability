@@ -1,115 +1,134 @@
 /**
- * Theme proof harness.
+ * App shell — session gate and navigation.
  *
- * Temporary: this exists so the Mars Funk tokens, the heat ramp and the shared
- * primitives can be checked against the design screenshots before any real
- * screen is built. Plan 04 replaces it with the actual app.
+ * The Mars Funk design is four standalone artboards with no navigation chrome of
+ * its own, so the tab row here is an addition rather than a reproduction. It is
+ * built from the design's existing pill vocabulary rather than inventing a new
+ * one.
  */
 
-import { formatOutOf, formatScore, formatSilentTag } from './lib/format';
-import { heatStyle } from './lib/heat';
-import { BAND_SIZE, ROSTER } from './lib/roster';
+import { useMemo, useState } from 'react';
+import { today as readToday } from './lib/clock';
+import { monthOf, type YearMonth } from './lib/month';
+import { useBandData } from './data/useBandData';
+import { BestDatesScreen } from './screens/BestDatesScreen';
+import { EntryScreen } from './screens/EntryScreen';
+import { MarkScreen } from './screens/MarkScreen';
+import { ReportScreen } from './screens/ReportScreen';
 import { Card } from './ui/Card';
-import { MemberRow } from './ui/MemberRow';
-import { StatusGlyph } from './ui/StatusGlyph';
 import { ThemeToggle } from './ui/ThemeToggle';
-import { CYCLE, type CellState } from './ui/status';
 import { useTheme } from './theme/useTheme';
 
-const SAMPLE_STATES: CellState[] = ['available', 'maybe', 'unavailable', 'unset', 'available', 'unset'];
+type Tab = 'mark' | 'report' | 'best';
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'mark', label: 'Mark' },
+  { id: 'report', label: 'Report' },
+  { id: 'best', label: 'Best dates' },
+];
 
 export function App() {
   const { theme, toggle } = useTheme();
+  // Read the clock once per mount. Everything downstream takes `today` as an
+  // argument, so nothing else in the app has to be time-dependent.
+  const today = useMemo(() => readToday(), []);
+  const [visibleMonth, setVisibleMonth] = useState<YearMonth>(() => monthOf(today));
+  const [tab, setTab] = useState<Tab>('mark');
+
+  const band = useBandData(visibleMonth, today);
 
   return (
-    <main className="mx-auto flex max-w-[430px] flex-col gap-4 p-4">
-      <div className="flex items-start justify-between gap-3">
+    <div className="mx-auto flex max-w-[430px] flex-col gap-3 p-4">
+      <header className="flex items-start justify-between gap-3">
         <h1 className="font-display text-[22px] leading-tight text-accent">
           RED PLANET
           <br />
           GROOVE
         </h1>
         <ThemeToggle theme={theme} onToggle={toggle} />
-      </div>
+      </header>
 
-      <Card>
-        <h2 className="mb-3 font-display text-[16px] text-accent">CELL STATES</h2>
-        <div className="flex flex-wrap gap-2">
-          {CYCLE.map((state) => (
-            <div
-              key={state}
-              className="flex h-14 w-14 flex-col items-center justify-center rounded-[10px] border-2 border-border"
-            >
-              <StatusGlyph state={state} className="text-[16px]" />
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 font-body text-[10.5px] text-ink-muted">
-          ✓ free &nbsp; × busy &nbsp; ? maybe &nbsp; empty = TBD
-        </p>
-      </Card>
-
-      <Card>
-        <h2 className="mb-3 font-display text-[16px] text-accent">HEAT SCALE</h2>
-        <div className="flex flex-col gap-1.5">
-          {[0, 1, 2, 3, 4, 5, 6].map((level) => {
-            const answered = heatStyle(level, 0, theme);
-            const silent = heatStyle(level, 2, theme);
-            return (
-              <div key={level} className="flex items-center gap-2">
-                <div
-                  className="flex h-10 w-14 items-center justify-center rounded-[10px] border-2 border-border font-display text-[15px]"
-                  style={answered}
-                >
-                  {formatScore(level)}
-                </div>
-                <div
-                  className="relative flex h-10 w-14 items-center justify-center rounded-[10px] border-2 border-border font-display text-[15px]"
-                  style={silent}
-                >
-                  {formatScore(level)}
-                  <span className="absolute top-0.5 right-1 font-body text-[9px]">
-                    {formatSilentTag(2)}
-                  </span>
-                </div>
-                <span className="font-body text-[11px] text-ink-muted">
-                  {level}/{BAND_SIZE} available · hatch = someone silent
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-
-      <Card>
-        <h2 className="mb-3 font-display text-[16px] text-accent">SATURDAY, OCTOBER 17</h2>
-        <div className="flex flex-col gap-1.5">
-          {ROSTER.map((member, i) => (
-            <MemberRow
-              key={member.id}
-              name={member.name}
-              state={SAMPLE_STATES[i] ?? 'unset'}
-              {...(member.isAdmin ? { trailing: 'Admin' } : {})}
-            />
-          ))}
-        </div>
-      </Card>
-
-      <Card>
-        <h2 className="mb-3 font-display text-[16px] text-accent">BEST DATES</h2>
-        <div className="flex items-center justify-between rounded-[16px] border-2 border-accent p-3.5">
-          <div>
-            <div className="font-display text-[16px]">FRI OCT 23</div>
-            <div className="font-body text-[10.5px] text-ink-muted">Next week</div>
-          </div>
-          <div
-            className="rounded-[10px] px-2 font-display text-[26px]"
-            style={heatStyle(6, 0, theme)}
+      {band.error ? (
+        <div
+          role="alert"
+          className="flex items-start gap-2 rounded-[12px] border-2 border-accent bg-surface px-3 py-2"
+        >
+          <p className="font-body text-[12px] text-ink">{band.error}</p>
+          <button
+            type="button"
+            onClick={band.dismissError}
+            aria-label="Dismiss"
+            className="ml-auto font-display text-[13px] text-accent"
           >
-            6<span className="text-[13px]">{formatOutOf(BAND_SIZE)}</span>
-          </div>
+            ×
+          </button>
         </div>
-      </Card>
-    </main>
+      ) : null}
+
+      {band.loading ? (
+        <Card>
+          <p className="font-body text-[13px] text-ink-muted">Warming up the tour bus…</p>
+        </Card>
+      ) : !band.me ? (
+        <EntryScreen roster={band.roster} onClaimed={band.refreshMe} />
+      ) : (
+        <>
+          <nav className="flex gap-1.5" aria-label="Screens">
+            {TABS.map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTab(id)}
+                aria-current={tab === id ? 'page' : undefined}
+                className={`min-h-11 flex-1 rounded-[20px] border-2 px-3 py-2 font-body text-[13px] font-bold ${
+                  tab === id
+                    ? 'border-accent bg-available text-available-ink'
+                    : 'border-border bg-surface text-ink'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+
+          {tab === 'mark' ? (
+            <MarkScreen
+              visibleMonth={visibleMonth}
+              onMonthChange={setVisibleMonth}
+              roster={band.roster}
+              me={band.me}
+              index={band.index}
+              today={today}
+              onSetStatus={band.setStatus}
+            />
+          ) : null}
+
+          {tab === 'report' ? (
+            <ReportScreen
+              visibleMonth={visibleMonth}
+              onMonthChange={setVisibleMonth}
+              roster={band.roster}
+              index={band.index}
+              theme={theme}
+              today={today}
+            />
+          ) : null}
+
+          {tab === 'best' ? (
+            <BestDatesScreen
+              roster={band.roster}
+              index={band.index}
+              theme={theme}
+              today={today}
+            />
+          ) : null}
+
+          <p className="pb-2 text-center font-body text-[11px] text-ink-muted">
+            Signed in as {band.me.name}
+            {band.me.isAdmin ? ' · Admin' : ''}
+          </p>
+        </>
+      )}
+    </div>
   );
 }

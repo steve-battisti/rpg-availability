@@ -1,5 +1,9 @@
 /**
- * Screenshot the built app in both themes.
+ * Screenshot the design preview in both themes.
+ *
+ * Shoots preview.html, not the app: the app needs a claimed Supabase session,
+ * and design fidelity should stay checkable without one. The preview renders the
+ * real screen components against fixture data.
  *
  * This project is a high-fidelity rebuild of a specific design, so "it compiles"
  * proves very little. This is how a change gets checked against
@@ -27,9 +31,10 @@ try {
       viewport: { width: 390, height: 900 },
       deviceScaleFactor: 2,
     });
-    await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
+    await page.goto(`http://localhost:${PORT}/preview.html`, { waitUntil: 'networkidle' });
     if (theme === 'dark') {
-      await page.click('button[aria-pressed]');
+      // Title, not aria-pressed: the app has several toggles now.
+      await page.click('button[title^="Switch to"]');
       await page.waitForTimeout(150);
     }
     // Bungee is a heavy display face; without this the shot catches the fallback.
