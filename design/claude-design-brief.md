@@ -18,8 +18,8 @@ any given date, and the app calls out the best upcoming dates to book a gig
 
 ## Screens to mock in each approach
 
-1. **Entry** — pick your name from a roster of six. One tap, then you're in.
-   Shown once; returning users skip it.
+1. **Entry** — enter the shared band passcode, then pick your name from a roster
+   of six. One tap, then you're in. Shown once; returning users skip it.
 2. **Mark Availability** — a month calendar. Every date cell is a three-state
    control the user cycles or picks: Available / Unavailable / Maybe / unset.
    Show the month grid, the state affordance, and month navigation.
@@ -57,6 +57,10 @@ screens at **desktop** too.
   a weight change. Make that part of the design, not an afterthought.
 - **Six is the whole universe.** The counts are 0–6. Designs can afford to show
   six discrete marks (dots, pips, initials) rather than abstract percentages.
+- **Use the real roster** in every mock — Steve, Katie, Mike, Fran, Rob, JT.
+  Steve is the admin. Real names of real lengths; no Lorem, no "Member 4".
+  Note that "JT" and "Katie" are very different widths — if the design leans on
+  initials or name chips, prove it survives both.
 - **Light and dark mode** for each approach.
 - Three states (Available / Unavailable / Maybe) plus **unset** — four visual
   conditions, and unset must be clearly distinguishable from unavailable.

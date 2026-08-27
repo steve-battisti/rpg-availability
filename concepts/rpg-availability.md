@@ -4,7 +4,18 @@ Requirements of record. Update this file when scope changes; plans reference it.
 
 ## Who
 Six band members, known to each other. No public signup, no email verification.
-One of them is the administrator (Steve).
+
+| # | Name | Role |
+|---|---|---|
+| 1 | Steve | **administrator** |
+| 2 | Katie | member |
+| 3 | Mike | member |
+| 4 | Fran | member |
+| 5 | Rob | member |
+| 6 | JT | member |
+
+The roster is fixed and seeded, not self-service. Adding or removing a member is
+a migration, not a feature — revisit only if the lineup actually changes.
 
 ## R1 — Identity
 - On first visit a user enters their name; it is persisted locally (cookie /
