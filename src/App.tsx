@@ -39,12 +39,21 @@ export function App() {
 
   return (
     <div className="mx-auto flex max-w-[430px] flex-col gap-3 p-4">
+      {/*
+        The Entry screen carries the wordmark inside its own card, as the design
+        draws it. Repeating it in the shell header would show it twice on the one
+        screen where it matters most.
+      */}
       <header className="flex items-start justify-between gap-3">
-        <h1 className="font-display text-[22px] leading-tight text-accent">
-          RED PLANET
-          <br />
-          GROOVE
-        </h1>
+        {band.me ? (
+          <h1 className="font-display text-[22px] leading-tight text-accent">
+            RED PLANET
+            <br />
+            GROOVE
+          </h1>
+        ) : (
+          <span />
+        )}
         <ThemeToggle theme={theme} onToggle={toggle} />
       </header>
 

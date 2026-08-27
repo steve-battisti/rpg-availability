@@ -78,11 +78,34 @@ answered is the one case that cannot show whether "unknown" renders correctly.
 - One real input behind four code boxes, so phones show a numeric keypad and
   autofill works. Four single-character inputs famously break both.
 
+### Deployed
+
+**https://rpg-availability.pages.dev** — Cloudflare Pages project
+`rpg-availability`, redeploy with `npm run deploy`.
+
+Verified live rather than trusting the upload: the page loads with no console
+errors, anonymous sign-in fires, and the six roster pills are read from the real
+database, which means `members_read` under RLS works for an anonymous session.
+
+Caught and fixed in the process: the wordmark rendered **twice** on Entry — once
+in the shell header and once inside the card where the design puts it. The header
+wordmark is now suppressed until a member is signed in.
+
+Two deployment choices worth recording:
+
+- **`preview.html` is excluded from production builds.** It is gated behind
+  `BUILD_PREVIEW`, which only `npm run shot` sets. It holds no credentials and
+  cannot reach the database, but a public page showing a fake band calendar would
+  only confuse whoever found it. (Requesting `/preview.html` on the live site
+  returns the app itself, via the SPA fallback.)
+- **`public/_headers` and `public/robots.txt`.** `X-Frame-Options: DENY`,
+  `nosniff`, a referrer policy, and a locked-down permissions policy; robots
+  disallows everything, because this is a private tool for six people.
+
 ### Still owed
 
 - **T1–T9 in `TestScript.md` have not been run.** They need a real phone and, for
   T4, two of them. T8's colourblind check is the one I would not skip.
-- Deploy to Cloudflare Pages.
 - The design specifies desktop layouts for the two calendar screens; only the
   mobile layout is built. It scales acceptably but is not the two-column desktop
   report from the spec.

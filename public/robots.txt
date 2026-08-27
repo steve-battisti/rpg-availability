@@ -1,0 +1,3 @@
+# Private tool for six people. Not for indexing.
+User-agent: *
+Disallow: /

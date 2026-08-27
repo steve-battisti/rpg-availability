@@ -9,8 +9,9 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "shot": "node scripts/shot.mjs",
-    "verify:supabase": "node scripts/verify-supabase.mjs"
+    "shot": "BUILD_PREVIEW=1 vite build && node scripts/shot.mjs",
+    "verify:supabase": "node scripts/verify-supabase.mjs",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=rpg-availability --branch=main --commit-dirty=true"
   },
   "repository": {
     "type": "git",
@@ -39,7 +40,8 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.2.2",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "wrangler": "^4.127.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",
