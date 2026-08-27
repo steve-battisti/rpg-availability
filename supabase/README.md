@@ -2,10 +2,17 @@
 
 Project: **`nwiszvzmvhygwxnqqgtz`** — https://nwiszvzmvhygwxnqqgtz.supabase.co
 
-**Status: schema and function written, not yet applied.** Everything that could
-be checked without a database has been (the seed matches the roster constant,
-RLS is enabled on every table, no client write policy exists on `members`), but
-the first `db push` is where the real verification happens.
+**Status: applied and verified against the live project (2026-08-27).**
+All 8 checks in `npm run verify:supabase` pass — anonymous sign-in is on, the
+roster seeded, RLS denies writing an unclaimed member's calendar and denies
+claiming a member directly, `claim_attempts` is unreadable by clients, and
+`claim-member` is deployed and rejects a wrong passcode.
+
+Re-run that check any time the schema or the function changes:
+
+```bash
+npm run verify:supabase
+```
 
 ## Setup
 

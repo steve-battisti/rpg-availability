@@ -22,11 +22,40 @@ Depends on: plan 01 (domain types). Independent of plan 02.
 
 ## Review — 2026-08-27
 
-**Written and typechecked. Not yet run against a live Supabase project** — none
-exists yet. `npm run typecheck` is clean and the suite is at **123 tests**, but
-everything that needs a real database is unverified until the first `db push`.
-That is stated at the top of `supabase/README.md` too, because a green test run
-here says nothing about whether the SQL applies.
+**Applied and verified against the live project** `nwiszvzmvhygwxnqqgtz`.
+`npm run typecheck` clean, **123 tests** green, and all **8 live checks** in
+`npm run verify:supabase` pass.
+
+### Verified against the real database
+
+A green `db push` only says the SQL parsed. `scripts/verify-supabase.mjs` checks
+what actually matters, against the deployed project:
+
+| Check | Result |
+|---|---|
+| Anonymous sign-in is enabled | ok |
+| Roster seeded — Steve, Katie, Mike, Fran, Rob, JT | ok |
+| Steve is the only admin | ok |
+| RLS blocks writing an unclaimed member's availability | ok — `42501` |
+| RLS blocks claiming a member directly | ok — no row changed |
+| `claim_attempts` unreadable by clients | ok |
+| `claim-member` deployed, rejects a bad passcode | ok — HTTP 403 |
+| `claim-member` refuses an unknown member | ok — HTTP 403 |
+
+**R3 is now enforced by the database, not by a disabled button.** The fourth and
+fifth rows are the ones that matter: an anonymous session that has not claimed a
+member cannot write anyone's calendar, and cannot claim one for itself.
+
+One detail worth keeping: the unknown-member case returns **403, not 404**,
+because the function checks the passcode before it looks the member up. That is
+the right order — it means someone without the passcode cannot probe which
+member ids exist.
+
+The check never needs the passcode; the negative cases are the informative ones,
+and a rejected wrong passcode is exactly what proves the function verifies it.
+Each run leaves one anonymous user and one failed attempt row, which is harmless:
+the rate limit keys on the session id and every run gets a fresh one, so it can
+never lock out a member.
 
 ### The core decision
 
@@ -86,7 +115,5 @@ and the file says so, so nobody later mistakes it for the lock.
 
 ### Still owed
 
-- **Nothing here is proven until a Supabase project exists.** Steve needs to run
-  the six steps in `supabase/README.md`; the first `db push` is the real test.
 - Plan 04 — the four screens, plus the admin "viewing as" switcher, which the
   Mars Funk design does not cover and which `editableMembers` now supports.
