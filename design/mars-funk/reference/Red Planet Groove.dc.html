@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Karla:wght@400;600;700&family=Fredoka:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#eceae4;font-family:system-ui,sans-serif}
+  .dv-turn{padding:36px 40px}
+  .dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 22px}
+  .dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+  .dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}
+  .dv-opts{display:flex;gap:44px;align-items:flex-start}
+  .dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+  .frow{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+  .fcap{font:600 11px system-ui;color:#71695c;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+  .wk-hd{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:6px}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Red Planet Groove — three visual approaches</span></div>
+<div class="dv-opts">
+
+<!-- ============ APPROACH A: UTILITARIAN / SPREADSHEET ============ -->
+<div class="dv-opt" id="1a" style="display:flex;flex-direction:column;gap:18px;width:max-content">
+  <div style="display:flex;align-items:baseline;gap:8px"><a class="dv-oid" href="#1a">1a</a><span style="font:700 16px system-ui;color:#1a1a1a">Utilitarian / Spreadsheet</span></div>
+  <div style="font:13px/1.55 system-ui;color:#54514a;max-width:560px">For the member who just wants the answer fast, on any device. Dense, monospace-numeral grid, no ornament. Trades away warmth — nothing here says "band."</div>
+  <button onClick="{{ a.toggleTheme }}" style="align-self:flex-start;font:600 12px system-ui;padding:8px 14px;border-radius:4px;border:1px solid {{ a.pal.border }};background:{{ a.pal.surface }};color:{{ a.pal.ink }};cursor:pointer">Toggle theme — now {{ a.theme }}</button>
+  <div style="font:11.5px/1.7 ui-monospace,Menlo,monospace;color:#5b574d;background:#f2f0e8;padding:12px 14px;border-radius:6px;max-width:560px;white-space:pre-wrap">tokens.a — bg #ffffff/#101314 · surface #f7f8f7/#1a1e20 · ink #14181a/#eef1f0 · border #d8dcdc/#2a2f31 · available #1f7a4c/#7fd9a8 · unavailable #5b6266/#aab1b1 · maybe #9a6b12/#e8b95a · heat hue 152° green
+font: ui-monospace/SF Mono (numerals+grid) · system-ui (labels) · radius 4-6px · 1px hairlines</div>
+
+  <div class="frow">
+    <!-- Entry -->
+    <div>
+      <div class="fcap">Entry — mobile 390</div>
+      <div style="width:390px;border-radius:6px;overflow:hidden;border:1px solid {{ a.pal.border }};background:{{ a.pal.bg }};font-family:system-ui,sans-serif">
+        <div style="padding:26px 22px;display:flex;flex-direction:column;gap:20px;min-height:660px">
+          <div style="font:700 15px ui-monospace,Menlo,monospace;letter-spacing:.02em;color:{{ a.pal.ink }}">RED PLANET GROOVE</div>
+          <div style="font:12px system-ui;color:{{ a.pal.inkMuted }}">Band passcode</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ a.passcodeDots }}" as="dot" hint-placeholder-count="4">
+              <div style="width:38px;height:44px;border:1px solid {{ a.pal.border }};border-radius:4px;display:flex;align-items:center;justify-content:center;font:700 18px ui-monospace,monospace;color:{{ a.pal.ink }};background:{{ a.pal.surface }}">{{ dot }}</div>
+            </sc-for>
+          </div>
+          <div style="height:1px;background:{{ a.pal.border }};margin:4px 0"></div>
+          <div style="font:12px system-ui;color:{{ a.pal.inkMuted }}">Select your name</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ a.roster }}" as="m" hint-placeholder-count="6">
+              <button onClick="{{ m.onClick }}" style="display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:4px;border:1px solid {{ m.borderC }};background:{{ m.bgC }};cursor:pointer;text-align:left">
+                <span style="font:600 13px ui-monospace,monospace;color:{{ m.inkC }}">{{ m.name }}</span>
+                <span style="font:10px system-ui;color:{{ a.pal.inkMuted }}">{{ m.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="margin-top:auto;font:11px system-ui;color:{{ a.pal.inkMuted }}">Shown once. Returning members skip straight to the calendar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mark Availability mobile -->
+    <div>
+      <div class="fcap">Mark Availability — mobile 390</div>
+      <div style="width:390px;border-radius:6px;overflow:hidden;border:1px solid {{ a.pal.border }};background:{{ a.pal.bg }};font-family:system-ui,sans-serif">
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <button style="border:none;background:none;font:14px ui-monospace,monospace;color:{{ a.pal.inkMuted }};cursor:default">‹</button>
+            <div style="font:700 13px ui-monospace,monospace;letter-spacing:.03em;color:{{ a.pal.ink }}">OCTOBER 2026</div>
+            <button style="border:none;background:none;font:14px ui-monospace,monospace;color:{{ a.pal.inkMuted }};cursor:default">›</button>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onClick="{{ a.markRest }}" style="flex:1;font:600 11px system-ui;padding:8px;border-radius:4px;border:1px solid {{ a.pal.accent }};background:{{ a.pal.surface }};color:{{ a.pal.accent }};cursor:pointer">Mark rest of month Available</button>
+            <button onClick="{{ a.toggleBulk }}" style="font:600 11px system-ui;padding:8px 10px;border-radius:4px;border:1px solid {{ a.pal.border }};background:{{ a.pal.surface }};color:{{ a.pal.ink }};cursor:pointer">{{ a.bulkLabel }}</button>
+          </div>
+          <sc-if value="{{ a.bulkOn }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:6px;font:11px system-ui;color:{{ a.pal.inkMuted }}">
+              <span>{{ a.bulkCount }} selected</span>
+              <button onClick="{{ a.applyAvail }}" style="margin-left:auto;font:700 10px ui-monospace,monospace;padding:5px 8px;border-radius:4px;border:1px solid {{ a.pal.status.available.ink }};background:{{ a.pal.status.available.bg }};color:{{ a.pal.status.available.ink }};cursor:pointer">✓</button>
+              <button onClick="{{ a.applyMaybe }}" style="font:700 10px ui-monospace,monospace;padding:5px 8px;border-radius:4px;border:1px solid {{ a.pal.status.maybe.ink }};background:{{ a.pal.status.maybe.bg }};color:{{ a.pal.status.maybe.ink }};cursor:pointer">?</button>
+              <button onClick="{{ a.applyUnavail }}" style="font:700 10px ui-monospace,monospace;padding:5px 8px;border-radius:4px;border:1px solid {{ a.pal.status.unavailable.ink }};background:{{ a.pal.status.unavailable.bg }};color:{{ a.pal.status.unavailable.ink }};cursor:pointer">×</button>
+            </div>
+          </sc-if>
+          <div class="wk-hd">
+            <sc-for list="{{ a.weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center;font:600 10px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ w }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ a.weeksMark }}" as="week" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ cell.onClick }}" style="aspect-ratio:1;border-radius:4px;border:1px solid {{ cell.border }};background:{{ cell.bg }};cursor:pointer;position:relative;padding:0">
+                    <span style="position:absolute;top:2px;left:4px;font:9px ui-monospace,monospace;color:{{ cell.dayInk }}">{{ cell.day }}</span>
+                    <span style="font:700 15px ui-monospace,monospace;color:{{ cell.ink }}">{{ cell.glyph }}</span>
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="display:flex;gap:8px;font:10.5px system-ui;color:{{ a.pal.inkMuted }};margin-top:4px"><span>✓ Available</span><span>× Unavailable</span><span>? Maybe</span><span>empty = unset</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability Report mobile -->
+    <div>
+      <div class="fcap">Availability Report — mobile 390</div>
+      <div style="width:390px;border-radius:6px;overflow:hidden;border:1px solid {{ a.pal.border }};background:{{ a.pal.bg }};font-family:system-ui,sans-serif">
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="font:700 13px ui-monospace,monospace;letter-spacing:.03em;color:{{ a.pal.ink }}">OCTOBER 2026 · COMBINED</div>
+          <div class="wk-hd">
+            <sc-for list="{{ a.weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center;font:600 10px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ w }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ a.weeksReport }}" as="week" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ cell.onClick }}" style="aspect-ratio:1;border-radius:4px;border:1px solid {{ cell.selBorder }};background:{{ cell.bg }};background-image:{{ cell.hatchImg }};background-size:6px 6px;cursor:pointer;position:relative;padding:0">
+                    <span style="font:700 14px ui-monospace,monospace;color:{{ cell.ink }}">{{ cell.scoreLabel }}</span>
+                    <sc-if value="{{ cell.hasSilent }}" hint-placeholder-val="{{ false }}">
+                      <span style="position:absolute;top:1px;right:2px;font:8px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ cell.silentTag }}</span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="height:1px;background:{{ a.pal.border }};margin:6px 0"></div>
+          <div style="font:700 11px ui-monospace,monospace;color:{{ a.pal.ink }}">{{ a.detail.dateLabel }}</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ a.detail.members }}" as="m" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:3px;background:{{ m.st.bg }}">
+                <span style="font:600 12px ui-monospace,monospace;color:{{ m.st.ink }}">{{ m.name }}</span>
+                <span style="font:700 12px ui-monospace,monospace;color:{{ m.st.ink }}">{{ m.st.glyph }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Best Dates mobile -->
+    <div>
+      <div class="fcap">Best Dates — mobile 390</div>
+      <div style="width:390px;border-radius:6px;overflow:hidden;border:1px solid {{ a.pal.border }};background:{{ a.pal.bg }};font-family:system-ui,sans-serif">
+        <div style="padding:16px;display:flex;flex-direction:column;gap:16px">
+          <div style="font:700 13px ui-monospace,monospace;letter-spacing:.03em;color:{{ a.pal.ink }}">BEST DATES · NEXT 6 MO</div>
+          <div>
+            <div style="font:700 10.5px system-ui;color:{{ a.pal.inkMuted }};margin-bottom:6px">GIG (FRI–SUN)</div>
+            <sc-for list="{{ a.bestGig }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 10px;border:1px solid {{ a.pal.border }};border-radius:4px;margin-bottom:6px;background:{{ d.bg }}">
+                <div><div style="font:700 14px ui-monospace,monospace;color:{{ d.ink }}">{{ d.label }}</div><div style="font:10px system-ui;color:{{ a.pal.inkMuted }}">{{ d.sub }}</div></div>
+                <div style="font:800 22px ui-monospace,monospace;color:{{ d.ink }}">{{ d.scoreLabel }}<span style="font:11px ui-monospace,monospace">/6</span></div>
+              </div>
+            </sc-for>
+          </div>
+          <div>
+            <div style="font:700 10.5px system-ui;color:{{ a.pal.inkMuted }};margin-bottom:6px">PRACTICE (MON–THU)</div>
+            <sc-for list="{{ a.bestPractice }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 10px;border:1px solid {{ a.pal.border }};border-radius:4px;margin-bottom:6px;background:{{ d.bg }}">
+                <div><div style="font:700 14px ui-monospace,monospace;color:{{ d.ink }}">{{ d.label }}</div><div style="font:10px system-ui;color:{{ a.pal.inkMuted }}">{{ d.sub }}</div></div>
+                <div style="font:800 22px ui-monospace,monospace;color:{{ d.ink }}">{{ d.scoreLabel }}<span style="font:11px ui-monospace,monospace">/6</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frow">
+    <!-- Desktop Mark -->
+    <div>
+      <div class="fcap">Mark Availability — desktop 1040</div>
+      <div style="width:1040px;border-radius:6px;overflow:hidden;border:1px solid {{ a.pal.border }};background:{{ a.pal.bg }};font-family:system-ui,sans-serif">
+        <div style="padding:24px 28px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font:700 16px ui-monospace,monospace;letter-spacing:.03em;color:{{ a.pal.ink }}">OCTOBER 2026 — MY AVAILABILITY</div>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ a.markRest }}" style="font:600 12px system-ui;padding:8px 12px;border-radius:4px;border:1px solid {{ a.pal.accent }};background:{{ a.pal.surface }};color:{{ a.pal.accent }};cursor:pointer">Mark rest of month Available</button>
+              <button onClick="{{ a.toggleBulk }}" style="font:600 12px system-ui;padding:8px 12px;border-radius:4px;border:1px solid {{ a.pal.border }};background:{{ a.pal.surface }};color:{{ a.pal.ink }};cursor:pointer">{{ a.bulkLabel }}</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+            <sc-for list="{{ a.weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center;font:600 11px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ w }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ a.weeksMark }}" as="week" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ cell.onClick }}" style="height:64px;border-radius:5px;border:1px solid {{ cell.border }};background:{{ cell.bg }};cursor:pointer;position:relative;padding:0">
+                    <span style="position:absolute;top:4px;left:6px;font:10px ui-monospace,monospace;color:{{ cell.dayInk }}">{{ cell.day }}</span>
+                    <span style="font:700 20px ui-monospace,monospace;color:{{ cell.ink }}">{{ cell.glyph }}</span>
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Report -->
+    <div>
+      <div class="fcap">Availability Report — desktop 1040</div>
+      <div style="width:1040px;border-radius:6px;overflow:hidden;border:1px solid {{ a.pal.border }};background:{{ a.pal.bg }};font-family:system-ui,sans-serif">
+        <div style="padding:24px 28px;display:flex;gap:22px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+            <div style="font:700 16px ui-monospace,monospace;letter-spacing:.03em;color:{{ a.pal.ink }}">OCTOBER 2026 — COMBINED</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+              <sc-for list="{{ a.weekdayLabels }}" as="w" hint-placeholder-count="7">
+                <div style="text-align:center;font:600 11px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ w }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ a.weeksReport }}" as="week" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+                <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                  <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                  <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ cell.onClick }}" style="height:78px;border-radius:5px;border:1px solid {{ cell.selBorder }};background:{{ cell.bg }};background-image:{{ cell.hatchImg }};background-size:6px 6px;cursor:pointer;position:relative;padding:4px;display:flex;flex-direction:column;justify-content:space-between">
+                      <div style="display:flex;justify-content:space-between"><span style="font:9px ui-monospace,monospace;color:{{ cell.dayInk }}">{{ cell.day }}</span><span style="font:8px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ cell.silentTag }}</span></div>
+                      <span style="font:700 18px ui-monospace,monospace;color:{{ cell.ink }};align-self:center">{{ cell.scoreLabel }}</span>
+                    </button>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+          <div style="width:220px;flex:none;display:flex;flex-direction:column;gap:10px;border-left:1px solid {{ a.pal.border }};padding-left:20px">
+            <div style="font:700 12px ui-monospace,monospace;color:{{ a.pal.ink }}">{{ a.detail.dateLabel }}</div>
+            <sc-for list="{{ a.detail.members }}" as="m" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 9px;border-radius:3px;background:{{ m.st.bg }}">
+                <span style="font:600 12px ui-monospace,monospace;color:{{ m.st.ink }}">{{ m.name }}</span>
+                <span style="font:700 12px ui-monospace,monospace;color:{{ m.st.ink }}">{{ m.st.glyph }}</span>
+              </div>
+            </sc-for>
+            <div style="font:11px system-ui;color:{{ a.pal.inkMuted }};margin-top:6px">Heat legend</div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <sc-for list="{{ a.legend }}" as="lv" hint-placeholder-count="7">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:22px;height:16px;border-radius:3px;background:{{ lv.bg }};background-image:{{ lv.hatchImg }};background-size:6px 6px"></div>
+                  <span style="font:11px ui-monospace,monospace;color:{{ a.pal.inkMuted }}">{{ lv.label }} available · hatch = someone silent</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APPROACH B: MARS FUNK ============ -->
+<div class="dv-opt" id="1b" style="display:flex;flex-direction:column;gap:18px;width:max-content">
+  <div style="display:flex;align-items:baseline;gap:8px"><a class="dv-oid" href="#1b">1b</a><span style="font:700 16px 'Bungee',cursive;color:#1a1a1a">Mars Funk</span></div>
+  <div style="font:13px/1.55 'Karla',sans-serif;color:#54514a;max-width:560px">For the band's identity — warm, retro-poster, a little theatrical. Trades away density; fewer things fit on screen at once than 1a.</div>
+  <button onClick="{{ b.toggleTheme }}" style="align-self:flex-start;font:700 12px 'Karla',sans-serif;padding:9px 16px;border-radius:20px;border:2px solid {{ b.pal.accent }};background:{{ b.pal.surface }};color:{{ b.pal.accent }};cursor:pointer">Toggle theme — now {{ b.theme }}</button>
+  <div style="font:11.5px/1.7 'Karla',sans-serif;color:#5b574d;background:#f2ead9;padding:12px 14px;border-radius:10px;max-width:560px;white-space:pre-wrap">tokens.b — bg #fbf3e6/#1b1023 · surface #fff9ef/#241531 · ink #2b1b12/#f5e8d8 · accent(rust) #c1502e/#e2673f · available #4b6b1e/#b9d98a · unavailable #6b5049/#c9a89e · maybe #8a5a12/#f0c46a · heat hue 88° olive-green
+font: 'Bungee' (display/numerals) · 'Karla' (body) · radius 16-24px · 3px chunky borders</div>
+
+  <div class="frow">
+    <div>
+      <div class="fcap">Entry — mobile 390</div>
+      <div style="width:390px;border-radius:24px;overflow:hidden;border:3px solid {{ b.pal.accent }};background:{{ b.pal.bg }};font-family:'Karla',sans-serif">
+        <div style="padding:28px 22px;display:flex;flex-direction:column;gap:22px;min-height:660px">
+          <div style="font:22px 'Bungee',cursive;color:{{ b.pal.accent }};line-height:1.15">RED PLANET<br>GROOVE</div>
+          <div style="font:13px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">Enter the mission code</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ b.passcodeDots }}" as="dot" hint-placeholder-count="4">
+              <div style="width:40px;height:48px;border:2px solid {{ b.pal.accent }};border-radius:12px;display:flex;align-items:center;justify-content:center;font:22px 'Bungee',cursive;color:{{ b.pal.ink }};background:{{ b.pal.surface }}">{{ dot }}</div>
+            </sc-for>
+          </div>
+          <div style="font:13px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">Who's on the mission?</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ b.roster }}" as="m" hint-placeholder-count="6">
+              <button onClick="{{ m.onClick }}" style="padding:12px 16px;border-radius:20px;border:2px solid {{ m.borderC }};background:{{ m.bgC }};cursor:pointer">
+                <span style="font:700 14px 'Karla',sans-serif;color:{{ m.inkC }}">{{ m.name }}</span>
+                <span style="font:10px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}"> {{ m.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="margin-top:auto;font:11px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">One tap and you're in. Returning members skip this.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Mark Availability — mobile 390</div>
+      <div style="width:390px;border-radius:24px;overflow:hidden;border:3px solid {{ b.pal.accent }};background:{{ b.pal.bg }};font-family:'Karla',sans-serif">
+        <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font:16px 'Bungee',cursive;color:{{ b.pal.inkMuted }}">‹</span>
+            <div style="font:16px 'Bungee',cursive;color:{{ b.pal.accent }}">OCT 2026</div>
+            <span style="font:16px 'Bungee',cursive;color:{{ b.pal.inkMuted }}">›</span>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onClick="{{ b.markRest }}" style="flex:1;font:700 11px 'Karla',sans-serif;padding:9px;border-radius:14px;border:2px solid {{ b.pal.status.available.ink }};background:{{ b.pal.status.available.bg }};color:{{ b.pal.status.available.ink }};cursor:pointer">Mark rest of month free</button>
+            <button onClick="{{ b.toggleBulk }}" style="font:700 11px 'Karla',sans-serif;padding:9px 12px;border-radius:14px;border:2px solid {{ b.pal.border }};background:{{ b.pal.surface }};color:{{ b.pal.ink }};cursor:pointer">{{ b.bulkLabel }}</button>
+          </div>
+          <sc-if value="{{ b.bulkOn }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:6px;font:11px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">
+              <span>{{ b.bulkCount }} selected</span>
+              <button onClick="{{ b.applyAvail }}" style="margin-left:auto;font:700 11px 'Karla',sans-serif;padding:6px 10px;border-radius:12px;border:2px solid {{ b.pal.status.available.ink }};background:{{ b.pal.status.available.bg }};color:{{ b.pal.status.available.ink }};cursor:pointer">✓</button>
+              <button onClick="{{ b.applyMaybe }}" style="font:700 11px 'Karla',sans-serif;padding:6px 10px;border-radius:12px;border:2px solid {{ b.pal.status.maybe.ink }};background:{{ b.pal.status.maybe.bg }};color:{{ b.pal.status.maybe.ink }};cursor:pointer">?</button>
+              <button onClick="{{ b.applyUnavail }}" style="font:700 11px 'Karla',sans-serif;padding:6px 10px;border-radius:12px;border:2px solid {{ b.pal.status.unavailable.ink }};background:{{ b.pal.status.unavailable.bg }};color:{{ b.pal.status.unavailable.ink }};cursor:pointer">×</button>
+            </div>
+          </sc-if>
+          <div class="wk-hd">
+            <sc-for list="{{ b.weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center;font:700 10px 'Bungee',cursive;color:{{ b.pal.inkMuted }}">{{ w }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ b.weeksMark }}" as="week" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ cell.onClick }}" style="aspect-ratio:1;border-radius:10px;border:2px solid {{ cell.border }};background:{{ cell.bg }};cursor:pointer;position:relative;padding:0">
+                    <span style="position:absolute;top:2px;left:5px;font:9px 'Karla',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</span>
+                    <span style="font:16px 'Bungee',cursive;color:{{ cell.ink }}">{{ cell.glyph }}</span>
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="display:flex;gap:8px;font:10.5px 'Karla',sans-serif;color:{{ b.pal.inkMuted }};margin-top:4px"><span>✓ free</span><span>× busy</span><span>? maybe</span><span>empty = TBD</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Availability Report — mobile 390</div>
+      <div style="width:390px;border-radius:24px;overflow:hidden;border:3px solid {{ b.pal.accent }};background:{{ b.pal.bg }};font-family:'Karla',sans-serif">
+        <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font:16px 'Bungee',cursive;color:{{ b.pal.accent }}">OCT 2026 — CREW</div>
+          <div class="wk-hd">
+            <sc-for list="{{ b.weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center;font:700 10px 'Bungee',cursive;color:{{ b.pal.inkMuted }}">{{ w }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ b.weeksReport }}" as="week" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ cell.onClick }}" style="aspect-ratio:1;border-radius:10px;border:2px solid {{ cell.selBorder }};background:{{ cell.bg }};background-image:{{ cell.hatchImg }};background-size:7px 7px;cursor:pointer;position:relative;padding:0">
+                    <span style="font:18px 'Bungee',cursive;color:{{ cell.ink }}">{{ cell.scoreLabel }}</span>
+                    <sc-if value="{{ cell.hasSilent }}" hint-placeholder-val="{{ false }}">
+                      <span style="position:absolute;top:1px;right:3px;font:8px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">{{ cell.silentTag }}</span>
+                    </sc-if>
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="height:2px;background:{{ b.pal.border }};margin:6px 0;border-radius:2px"></div>
+          <div style="font:15px 'Bungee',cursive;color:{{ b.pal.accent }}">{{ b.detail.dateLabel }}</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ b.detail.members }}" as="m" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:12px;background:{{ m.st.bg }}">
+                <span style="font:700 13px 'Karla',sans-serif;color:{{ m.st.ink }}">{{ m.name }}</span>
+                <span style="font:15px 'Bungee',cursive;color:{{ m.st.ink }}">{{ m.st.glyph }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Best Dates — mobile 390</div>
+      <div style="width:390px;border-radius:24px;overflow:hidden;border:3px solid {{ b.pal.accent }};background:{{ b.pal.bg }};font-family:'Karla',sans-serif">
+        <div style="padding:18px;display:flex;flex-direction:column;gap:18px">
+          <div style="font:16px 'Bungee',cursive;color:{{ b.pal.accent }}">BEST DATES</div>
+          <div>
+            <div style="font:700 11px 'Karla',sans-serif;color:{{ b.pal.inkMuted }};margin-bottom:8px">🎸 GIGS · FRI–SUN</div>
+            <sc-for list="{{ b.bestGig }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:2px solid {{ b.pal.accent }};border-radius:16px;margin-bottom:8px;background:{{ d.bg }}">
+                <div><div style="font:16px 'Bungee',cursive;color:{{ d.ink }}">{{ d.label }}</div><div style="font:10.5px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">{{ d.sub }}</div></div>
+                <div style="font:26px 'Bungee',cursive;color:{{ d.ink }}">{{ d.scoreLabel }}<span style="font:12px 'Karla',sans-serif">/6</span></div>
+              </div>
+            </sc-for>
+          </div>
+          <div>
+            <div style="font:700 11px 'Karla',sans-serif;color:{{ b.pal.inkMuted }};margin-bottom:8px">🥁 PRACTICE · MON–THU</div>
+            <sc-for list="{{ b.bestPractice }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:2px solid {{ b.pal.border }};border-radius:16px;margin-bottom:8px;background:{{ d.bg }}">
+                <div><div style="font:16px 'Bungee',cursive;color:{{ d.ink }}">{{ d.label }}</div><div style="font:10.5px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">{{ d.sub }}</div></div>
+                <div style="font:26px 'Bungee',cursive;color:{{ d.ink }}">{{ d.scoreLabel }}<span style="font:12px 'Karla',sans-serif">/6</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frow">
+    <div>
+      <div class="fcap">Mark Availability — desktop 1040</div>
+      <div style="width:1040px;border-radius:24px;overflow:hidden;border:3px solid {{ b.pal.accent }};background:{{ b.pal.bg }};font-family:'Karla',sans-serif">
+        <div style="padding:26px 30px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font:22px 'Bungee',cursive;color:{{ b.pal.accent }}">OCTOBER 2026 — MY AVAILABILITY</div>
+            <div style="display:flex;gap:10px">
+              <button onClick="{{ b.markRest }}" style="font:700 12px 'Karla',sans-serif;padding:9px 14px;border-radius:16px;border:2px solid {{ b.pal.status.available.ink }};background:{{ b.pal.status.available.bg }};color:{{ b.pal.status.available.ink }};cursor:pointer">Mark rest of month free</button>
+              <button onClick="{{ b.toggleBulk }}" style="font:700 12px 'Karla',sans-serif;padding:9px 14px;border-radius:16px;border:2px solid {{ b.pal.border }};background:{{ b.pal.surface }};color:{{ b.pal.ink }};cursor:pointer">{{ b.bulkLabel }}</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:9px">
+            <sc-for list="{{ b.weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center;font:700 12px 'Bungee',cursive;color:{{ b.pal.inkMuted }}">{{ w }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ b.weeksMark }}" as="week" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:9px">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ cell.onClick }}" style="height:66px;border-radius:14px;border:2px solid {{ cell.border }};background:{{ cell.bg }};cursor:pointer;position:relative;padding:0">
+                    <span style="position:absolute;top:5px;left:8px;font:10px 'Karla',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</span>
+                    <span style="font:22px 'Bungee',cursive;color:{{ cell.ink }}">{{ cell.glyph }}</span>
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Availability Report — desktop 1040</div>
+      <div style="width:1040px;border-radius:24px;overflow:hidden;border:3px solid {{ b.pal.accent }};background:{{ b.pal.bg }};font-family:'Karla',sans-serif">
+        <div style="padding:26px 30px;display:flex;gap:24px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+            <div style="font:22px 'Bungee',cursive;color:{{ b.pal.accent }}">OCTOBER 2026 — CREW</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:9px">
+              <sc-for list="{{ b.weekdayLabels }}" as="w" hint-placeholder-count="7">
+                <div style="text-align:center;font:700 12px 'Bungee',cursive;color:{{ b.pal.inkMuted }}">{{ w }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ b.weeksReport }}" as="week" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:9px">
+                <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                  <sc-if value="{{ cell.blank }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+                  <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ cell.onClick }}" style="height:82px;border-radius:14px;border:2px solid {{ cell.selBorder }};background:{{ cell.bg }};background-image:{{ cell.hatchImg }};background-size:7px 7px;cursor:pointer;position:relative;padding:5px;display:flex;flex-direction:column;justify-content:space-between">
+                      <div style="display:flex;justify-content:space-between"><span style="font:10px 'Karla',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</span><span style="font:9px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">{{ cell.silentTag }}</span></div>
+                      <span style="font:20px 'Bungee',cursive;color:{{ cell.ink }};align-self:center">{{ cell.scoreLabel }}</span>
+                    </button>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+          <div style="width:230px;flex:none;display:flex;flex-direction:column;gap:10px;border-left:2px solid {{ b.pal.border }};padding-left:20px">
+            <div style="font:16px 'Bungee',cursive;color:{{ b.pal.accent }}">{{ b.detail.dateLabel }}</div>
+            <sc-for list="{{ b.detail.members }}" as="m" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:12px;background:{{ m.st.bg }}">
+                <span style="font:700 13px 'Karla',sans-serif;color:{{ m.st.ink }}">{{ m.name }}</span>
+                <span style="font:15px 'Bungee',cursive;color:{{ m.st.ink }}">{{ m.st.glyph }}</span>
+              </div>
+            </sc-for>
+            <div style="font:11px 'Karla',sans-serif;color:{{ b.pal.inkMuted }};margin-top:6px">Heat legend</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <sc-for list="{{ b.legend }}" as="lv" hint-placeholder-count="7">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:24px;height:18px;border-radius:6px;background:{{ lv.bg }};background-image:{{ lv.hatchImg }};background-size:7px 7px"></div>
+                  <span style="font:11px 'Karla',sans-serif;color:{{ b.pal.inkMuted }}">{{ lv.label }} · hatch = someone silent</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APPROACH C: CARD/LIST AGENDA ============ -->
+<div class="dv-opt" id="1c" style="display:flex;flex-direction:column;gap:18px;width:max-content">
+  <div style="display:flex;align-items:baseline;gap:8px"><a class="dv-oid" href="#1c">1c</a><span style="font:600 16px 'Fredoka',sans-serif;color:#1a1a1a">Agenda / List-led</span></div>
+  <div style="font:13px/1.55 'Work Sans',sans-serif;color:#54514a;max-width:560px">Questions the grid entirely — a scrolling run of weeks, each date a full-width row. For a phone read one-handed while scrolling; trades away the at-a-glance whole-month overview of 1a/1b.</div>
+  <button onClick="{{ c.toggleTheme }}" style="align-self:flex-start;font:600 12px 'Work Sans',sans-serif;padding:9px 16px;border-radius:10px;border:1px solid {{ c.pal.accent }};background:{{ c.pal.surface }};color:{{ c.pal.accent }};cursor:pointer">Toggle theme — now {{ c.theme }}</button>
+  <div style="font:11.5px/1.7 'Work Sans',sans-serif;color:#5b574d;background:#eceae4;padding:12px 14px;border-radius:8px;max-width:560px;white-space:pre-wrap">tokens.c — bg #f6f5f2/#1c1b18 · surface #ffffff/#262420 · ink #26241f/#f2efe8 · accent(teal) #2f7d78/#4fa39c · available #1f6b4a/#8fd3ae · unavailable #6b665c/#a9a397 · maybe #a15f1e/#e8ab6a · heat hue 165° sage-green
+font: 'Fredoka' (headings/numerals) · 'Work Sans' (body) · radius 14-18px · flat 1px cards, no shadow</div>
+
+  <div class="frow">
+    <div>
+      <div class="fcap">Entry — mobile 390</div>
+      <div style="width:390px;border-radius:18px;overflow:hidden;border:1px solid {{ c.pal.border }};background:{{ c.pal.bg }};font-family:'Work Sans',sans-serif">
+        <div style="padding:28px 22px;display:flex;flex-direction:column;gap:22px;min-height:660px">
+          <div style="font:600 20px 'Fredoka',sans-serif;color:{{ c.pal.accent }}">Red Planet Groove</div>
+          <div style="font:13px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">Band passcode</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ c.passcodeDots }}" as="dot" hint-placeholder-count="4">
+              <div style="width:38px;height:44px;border:1px solid {{ c.pal.border }};border-radius:12px;display:flex;align-items:center;justify-content:center;font:600 18px 'Fredoka',sans-serif;color:{{ c.pal.ink }};background:{{ c.pal.surface }}">{{ dot }}</div>
+            </sc-for>
+          </div>
+          <div style="font:13px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">That's you, right?</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ c.roster }}" as="m" hint-placeholder-count="6">
+              <button onClick="{{ m.onClick }}" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;border:1px solid {{ m.borderC }};background:{{ m.bgC }};cursor:pointer;text-align:left">
+                <div style="width:34px;height:34px;border-radius:50%;background:{{ c.pal.accent }};color:#fff;display:flex;align-items:center;justify-content:center;font:600 12px 'Fredoka',sans-serif;flex:none">{{ m.initials }}</div>
+                <span style="font:600 14px 'Work Sans',sans-serif;color:{{ m.inkC }}">{{ m.name }}</span>
+                <span style="font:11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};margin-left:auto">{{ m.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Mark Availability — mobile 390 (scrolling weeks)</div>
+      <div style="width:390px;border-radius:18px;overflow:hidden;border:1px solid {{ c.pal.border }};background:{{ c.pal.bg }};font-family:'Work Sans',sans-serif">
+        <div style="padding:18px;display:flex;flex-direction:column;gap:14px;max-height:660px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font:600 15px 'Fredoka',sans-serif;color:{{ c.pal.ink }}">October 2026</div>
+            <div style="display:flex;gap:6px"><span style="color:{{ c.pal.inkMuted }}">‹</span><span style="color:{{ c.pal.inkMuted }}">›</span></div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onClick="{{ c.markRest }}" style="flex:1;font:600 11px 'Work Sans',sans-serif;padding:9px;border-radius:10px;border:none;background:{{ c.pal.status.available.bg }};color:{{ c.pal.status.available.ink }};cursor:pointer">I'm free the rest of the month</button>
+            <button onClick="{{ c.toggleBulk }}" style="font:600 11px 'Work Sans',sans-serif;padding:9px 12px;border-radius:10px;border:1px solid {{ c.pal.border }};background:{{ c.pal.surface }};color:{{ c.pal.ink }};cursor:pointer">{{ c.bulkLabel }}</button>
+          </div>
+          <sc-if value="{{ c.bulkOn }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:6px;font:11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">
+              <span>{{ c.bulkCount }} selected</span>
+              <button onClick="{{ c.applyAvail }}" style="margin-left:auto;font:600 11px 'Work Sans',sans-serif;padding:6px 10px;border-radius:10px;border:none;background:{{ c.pal.status.available.bg }};color:{{ c.pal.status.available.ink }};cursor:pointer">✓</button>
+              <button onClick="{{ c.applyMaybe }}" style="font:600 11px 'Work Sans',sans-serif;padding:6px 10px;border-radius:10px;border:none;background:{{ c.pal.status.maybe.bg }};color:{{ c.pal.status.maybe.ink }};cursor:pointer">?</button>
+              <button onClick="{{ c.applyUnavail }}" style="font:600 11px 'Work Sans',sans-serif;padding:6px 10px;border-radius:10px;border:none;background:{{ c.pal.status.unavailable.bg }};color:{{ c.pal.status.unavailable.ink }};cursor:pointer">×</button>
+            </div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:10px;overflow-y:auto;padding-right:2px">
+            <sc-for list="{{ c.weeksMark }}" as="week" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="font:600 10px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};text-transform:uppercase;letter-spacing:.05em;margin-top:2px">{{ week.label }}</div>
+                <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                  <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ cell.onClick }}" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;border:1px solid {{ cell.border }};background:{{ cell.bg }};cursor:pointer;text-align:left">
+                      <div style="width:34px;flex:none"><div style="font:11px 'Work Sans',sans-serif;color:{{ cell.dayInk }}">{{ cell.wd }}</div><div style="font:600 15px 'Fredoka',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</div></div>
+                      <div style="flex:1;font:600 12px 'Work Sans',sans-serif;color:{{ cell.ink }}">{{ cell.statusLabel }}</div>
+                      <div style="font:18px 'Work Sans',sans-serif;color:{{ cell.ink }}">{{ cell.glyph }}</div>
+                    </button>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Availability Report — mobile 390 (agenda + accordion)</div>
+      <div style="width:390px;border-radius:18px;overflow:hidden;border:1px solid {{ c.pal.border }};background:{{ c.pal.bg }};font-family:'Work Sans',sans-serif">
+        <div style="padding:18px;display:flex;flex-direction:column;gap:12px;max-height:660px;overflow:hidden">
+          <div style="font:600 15px 'Fredoka',sans-serif;color:{{ c.pal.ink }}">October — everyone</div>
+          <div style="display:flex;flex-direction:column;gap:8px;overflow-y:auto">
+            <sc-for list="{{ c.weeksReport }}" as="week" hint-placeholder-count="5">
+              <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <button onClick="{{ cell.onClick }}" style="width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid {{ cell.selBorder }};background:{{ cell.bg }};background-image:{{ cell.hatchImg }};background-size:7px 7px;cursor:pointer;text-align:left">
+                      <div style="width:38px;flex:none"><div style="font:10px 'Work Sans',sans-serif;color:{{ cell.dayInk }}">{{ cell.wd }}</div><div style="font:600 14px 'Fredoka',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</div></div>
+                      <div style="flex:1;font:600 20px 'Fredoka',sans-serif;color:{{ cell.ink }}">{{ cell.scoreLabel }}<span style="font:11px 'Work Sans',sans-serif"> / 6</span></div>
+                      <sc-if value="{{ cell.hasSilent }}" hint-placeholder-val="{{ false }}"><span style="font:10px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">{{ cell.silentTag }} silent</span></sc-if>
+                    </button>
+                    <sc-if value="{{ cell.selected }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;flex-direction:column;gap:3px;padding:8px 12px 4px">
+                        <sc-for list="{{ c.detail.members }}" as="m" hint-placeholder-count="6">
+                          <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 9px;border-radius:8px;background:{{ m.st.bg }}">
+                            <span style="font:600 12px 'Work Sans',sans-serif;color:{{ m.st.ink }}">{{ m.name }}</span>
+                            <span style="font:14px 'Work Sans',sans-serif;color:{{ m.st.ink }}">{{ m.st.glyph }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </sc-for>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Best Dates — mobile 390</div>
+      <div style="width:390px;border-radius:18px;overflow:hidden;border:1px solid {{ c.pal.border }};background:{{ c.pal.bg }};font-family:'Work Sans',sans-serif">
+        <div style="padding:18px;display:flex;flex-direction:column;gap:16px">
+          <div style="font:600 15px 'Fredoka',sans-serif;color:{{ c.pal.ink }}">Best dates ahead</div>
+          <div>
+            <div style="font:600 11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};margin-bottom:8px">GIG NIGHTS</div>
+            <sc-for list="{{ c.bestGig }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px;background:{{ d.bg }};margin-bottom:8px">
+                <div style="font:600 26px 'Fredoka',sans-serif;color:{{ d.ink }}">{{ d.scoreLabel }}<span style="font:11px 'Work Sans',sans-serif">/6</span></div>
+                <div><div style="font:600 14px 'Work Sans',sans-serif;color:{{ d.ink }}">{{ d.label }}</div><div style="font:10.5px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">{{ d.sub }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+          <div>
+            <div style="font:600 11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};margin-bottom:8px">PRACTICE SLOTS</div>
+            <sc-for list="{{ c.bestPractice }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px;background:{{ d.bg }};margin-bottom:8px">
+                <div style="font:600 26px 'Fredoka',sans-serif;color:{{ d.ink }}">{{ d.scoreLabel }}<span style="font:11px 'Work Sans',sans-serif">/6</span></div>
+                <div><div style="font:600 14px 'Work Sans',sans-serif;color:{{ d.ink }}">{{ d.label }}</div><div style="font:10.5px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">{{ d.sub }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frow">
+    <div>
+      <div class="fcap">Mark Availability — desktop 1040 (wide list)</div>
+      <div style="width:1040px;border-radius:18px;overflow:hidden;border:1px solid {{ c.pal.border }};background:{{ c.pal.bg }};font-family:'Work Sans',sans-serif">
+        <div style="padding:26px 30px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font:600 20px 'Fredoka',sans-serif;color:{{ c.pal.ink }}">October 2026 — my availability</div>
+            <div style="display:flex;gap:10px">
+              <button onClick="{{ c.markRest }}" style="font:600 12px 'Work Sans',sans-serif;padding:9px 14px;border-radius:10px;border:none;background:{{ c.pal.status.available.bg }};color:{{ c.pal.status.available.ink }};cursor:pointer">I'm free the rest of the month</button>
+              <button onClick="{{ c.toggleBulk }}" style="font:600 12px 'Work Sans',sans-serif;padding:9px 14px;border-radius:10px;border:1px solid {{ c.pal.border }};background:{{ c.pal.surface }};color:{{ c.pal.ink }};cursor:pointer">{{ c.bulkLabel }}</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <sc-for list="{{ c.weeksMark }}" as="week" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="font:600 11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};text-transform:uppercase;letter-spacing:.05em">{{ week.label }}</div>
+                <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                  <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ cell.onClick }}" style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:12px;border:1px solid {{ cell.border }};background:{{ cell.bg }};cursor:pointer;text-align:left">
+                      <div style="width:70px;flex:none;display:flex;align-items:baseline;gap:6px"><span style="font:600 16px 'Fredoka',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</span><span style="font:11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">{{ cell.wd }}</span></div>
+                      <div style="flex:1;font:600 13px 'Work Sans',sans-serif;color:{{ cell.ink }}">{{ cell.statusLabel }}</div>
+                      <div style="font:20px 'Work Sans',sans-serif;color:{{ cell.ink }}">{{ cell.glyph }}</div>
+                    </button>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fcap">Availability Report — desktop 1040 (wide list)</div>
+      <div style="width:1040px;border-radius:18px;overflow:hidden;border:1px solid {{ c.pal.border }};background:{{ c.pal.bg }};font-family:'Work Sans',sans-serif">
+        <div style="padding:26px 30px;display:flex;gap:24px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+            <div style="font:600 20px 'Fredoka',sans-serif;color:{{ c.pal.ink }}">October — everyone</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+              <sc-for list="{{ c.weeksReport }}" as="week" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="font:600 11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};text-transform:uppercase;letter-spacing:.05em">{{ week.label }}</div>
+                  <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                    <sc-if value="{{ cell.show }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ cell.onClick }}" style="display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:12px;border:1px solid {{ cell.selBorder }};background:{{ cell.bg }};background-image:{{ cell.hatchImg }};background-size:7px 7px;cursor:pointer;text-align:left">
+                        <div style="width:56px;flex:none;display:flex;align-items:baseline;gap:5px"><span style="font:600 14px 'Fredoka',sans-serif;color:{{ cell.dayInk }}">{{ cell.day }}</span><span style="font:10px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">{{ cell.wd }}</span></div>
+                        <div style="flex:1;font:600 15px 'Fredoka',sans-serif;color:{{ cell.ink }}">{{ cell.scoreLabel }}<span style="font:10px 'Work Sans',sans-serif"> /6</span></div>
+                        <div style="display:flex;gap:2px">
+                          <sc-for list="{{ cell.pips }}" as="p" hint-placeholder-count="6">
+                            <div style="width:8px;height:8px;border-radius:50%;background:{{ p.st.ink }}"></div>
+                          </sc-for>
+                        </div>
+                      </button>
+                    </sc-if>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="width:230px;flex:none;display:flex;flex-direction:column;gap:10px;border-left:1px solid {{ c.pal.border }};padding-left:20px">
+            <div style="font:600 15px 'Fredoka',sans-serif;color:{{ c.pal.ink }}">{{ c.detail.dateLabel }}</div>
+            <sc-for list="{{ c.detail.members }}" as="m" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:10px;background:{{ m.st.bg }}">
+                <span style="font:600 12px 'Work Sans',sans-serif;color:{{ m.st.ink }}">{{ m.name }}</span>
+                <span style="font:14px 'Work Sans',sans-serif;color:{{ m.st.ink }}">{{ m.st.glyph }}</span>
+              </div>
+            </sc-for>
+            <div style="font:11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }};margin-top:6px">Heat legend</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <sc-for list="{{ c.legend }}" as="lv" hint-placeholder-count="7">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:24px;height:18px;border-radius:6px;background:{{ lv.bg }};background-image:{{ lv.hatchImg }};background-size:7px 7px"></div>
+                  <span style="font:11px 'Work Sans',sans-serif;color:{{ c.pal.inkMuted }}">{{ lv.label }} · hatch = someone silent</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+
+const ROSTER = [
+  {name:'Steve', initials:'S', admin:true},
+  {name:'Katie', initials:'K'},
+  {name:'Mike', initials:'M'},
+  {name:'Fran', initials:'F'},
+  {name:'Rob', initials:'R'},
+  {name:'JT', initials:'JT'}
+];
+const CHARMAP = {A:'available', U:'unavailable', M:'maybe', '.':'unset'};
+const REPORT_CODES = [
+  '..A...','..A..A','A.AA..','AUAAAM','M.....','......','A.U...',
+  'AUAAAA','AAAAAA','AAAAAM','AAAUAA','AAAAAA','UUUAAU','MMAA..',
+  'AAAAA.','AAAAAA','AAAAMA','AAUAAA','......','AA.AA.','AAAAAA',
+  'AAMAAA','AAAAAA','AAAAAA','AAAUAA','UUMUUU','AAAAAA','AAAAMA',
+  'AA.AAA','AAAAAA','AAAAAM'
+];
+const INIT_MARKS = {1:'unset',2:'unset',3:'unset',4:'unavailable',5:'unset',6:'unset',7:'unset',
+  8:'unavailable',9:'available',10:'available',11:'available',12:'available',13:'unavailable',
+  14:'maybe',15:'available',16:'available',17:'available',18:'available',19:'unset',20:'available',
+  21:'available',22:'available',23:'available',24:'available',25:'available',26:'unavailable',
+  27:'available',28:'available',29:'available',30:'available',31:'available'};
+const BEST_GIG = [
+  {label:'Fri Oct 23', sub:'This week', score:6, silent:0},
+  {label:'Sat Oct 24', sub:'This week', score:6, silent:0},
+  {label:'Fri Oct 30', sub:'Next week', score:6, silent:0},
+  {label:'Sat Nov 21', sub:'Mid Nov', score:5.5, silent:0}
+];
+const BEST_PRACTICE = [
+  {label:'Tue Oct 27', sub:'This week', score:6, silent:0},
+  {label:'Wed Oct 28', sub:'This week', score:5.5, silent:0},
+  {label:'Thu Oct 15', sub:'Earlier', score:5, silent:1},
+  {label:'Mon Nov 9', sub:'Nov', score:5, silent:0}
+];
+const WD_SHORT = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+const WD_LONG = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function computeStats(code){
+  let a=0,u=0,m=0,s=0;
+  for (const ch of code){ if(ch==='A')a++; else if(ch==='U')u++; else if(ch==='M')m++; else s++; }
+  return {available:a, unavailable:u, maybe:m, silent:s, score:a+m*0.5};
+}
+function fmtScore(n){ return n===Math.floor(n) ? String(n) : (Math.floor(n)+'\u00BD'); }
+
+class Component extends DCLogic {
+  state = {
+    theme: {a:'light', b:'light', c:'light'},
+    myMarks: {a:{...INIT_MARKS}, b:{...INIT_MARKS}, c:{...INIT_MARKS}},
+    bulkMode: {a:false, b:false, c:false},
+    bulkSel: {a:[], b:[], c:[]},
+    selectedDay: {a:17, b:17, c:17},
+    entryPicked: {a:null, b:null, c:null}
+  };
+
+  constructor(props){
+    super(props);
+    const first = new Date(2026,9,1);
+    const startDow = first.getDay();
+    const cells = [];
+    for (let i=0;i<startDow;i++) cells.push(null);
+    for (let d=1; d<=31; d++) cells.push(d);
+    while (cells.length % 7) cells.push(null);
+    this.monthGrid = [];
+    for (let i=0;i<cells.length;i+=7) this.monthGrid.push(cells.slice(i,i+7));
+  }
+
+  cycleMark(key, day){
+    const order = ['unset','available','maybe','unavailable'];
+    this.setState(s=>{
+      const marks = {...s.myMarks[key]};
+      const cur = marks[day] || 'unset';
+      marks[day] = order[(order.indexOf(cur)+1) % order.length];
+      return {myMarks: {...s.myMarks, [key]: marks}};
+    });
+  }
+  toggleBulkMode(key){
+    this.setState(s=>({
+      bulkMode: {...s.bulkMode, [key]: !s.bulkMode[key]},
+      bulkSel: {...s.bulkSel, [key]: []}
+    }));
+  }
+  toggleBulkSel(key, day){
+    this.setState(s=>{
+      const sel = s.bulkSel[key] || [];
+      const next = sel.includes(day) ? sel.filter(d=>d!==day) : [...sel, day];
+      return {bulkSel: {...s.bulkSel, [key]: next}};
+    });
+  }
+  applyBulk(key, status){
+    this.setState(s=>{
+      const marks = {...s.myMarks[key]};
+      (s.bulkSel[key]||[]).forEach(d=> marks[d]=status);
+      return {
+        myMarks: {...s.myMarks, [key]: marks},
+        bulkSel: {...s.bulkSel, [key]: []},
+        bulkMode: {...s.bulkMode, [key]: false}
+      };
+    });
+  }
+  markRestOfMonth(key){
+    this.setState(s=>{
+      const marks = {...s.myMarks[key]};
+      for (let d=1; d<=31; d++){ if(!marks[d] || marks[d]==='unset') marks[d]='available'; }
+      return {myMarks: {...s.myMarks, [key]: marks}};
+    });
+  }
+  selectDay(key, day){ this.setState(s=>({selectedDay: {...s.selectedDay, [key]: day}})); }
+  toggleTheme(key){ this.setState(s=>({theme: {...s.theme, [key]: s.theme[key]==='light'?'dark':'light'}})); }
+  pickName(key, name){ this.setState(s=>({entryPicked: {...s.entryPicked, [key]: name}})); }
+
+  palette(key, theme){
+    const P = {
+      a: {
+        light:{bg:'#ffffff',surface:'#f7f8f7',ink:'#14181a',inkMuted:'#9aa1a4',border:'#d8dcdc',accent:'#1f7a4c',
+          status:{available:{bg:'#e4f3ea',ink:'#1f7a4c',glyph:'\u2713'},unavailable:{bg:'#eef0f0',ink:'#5b6266',glyph:'\u00D7'},maybe:{bg:'#fdf3df',ink:'#9a6b12',glyph:'?'},unset:{bg:'transparent',ink:'#9aa1a4',glyph:'',border:'#d8dcdc'}}},
+        dark:{bg:'#101314',surface:'#1a1e20',ink:'#eef1f0',inkMuted:'#7d8386',border:'#2a2f31',accent:'#7fd9a8',
+          status:{available:{bg:'#173425',ink:'#7fd9a8',glyph:'\u2713'},unavailable:{bg:'#242a2b',ink:'#aab1b1',glyph:'\u00D7'},maybe:{bg:'#3a2f14',ink:'#e8b95a',glyph:'?'},unset:{bg:'transparent',ink:'#6c7376',glyph:'',border:'#2a2f31'}}}
+      },
+      b: {
+        light:{bg:'#fbf3e6',surface:'#fff9ef',ink:'#2b1b12',inkMuted:'#8a6b52',border:'#e4d2b4',accent:'#c1502e',
+          status:{available:{bg:'#dfe8c4',ink:'#4b6b1e',glyph:'\u2713'},unavailable:{bg:'#e4d9d6',ink:'#6b5049',glyph:'\u00D7'},maybe:{bg:'#f6dfa8',ink:'#8a5a12',glyph:'?'},unset:{bg:'transparent',ink:'#a98f6e',glyph:'',border:'#e4d2b4'}}},
+        dark:{bg:'#1b1023',surface:'#241531',ink:'#f5e8d8',inkMuted:'#b39d8e',border:'#3a2740',accent:'#e2673f',
+          status:{available:{bg:'#33421c',ink:'#b9d98a',glyph:'\u2713'},unavailable:{bg:'#3a2c28',ink:'#c9a89e',glyph:'\u00D7'},maybe:{bg:'#4a3714',ink:'#f0c46a',glyph:'?'},unset:{bg:'transparent',ink:'#8a715a',glyph:'',border:'#3a2740'}}}
+      },
+      c: {
+        light:{bg:'#f6f5f2',surface:'#ffffff',ink:'#26241f',inkMuted:'#8a857a',border:'#e5e1d8',accent:'#2f7d78',
+          status:{available:{bg:'#dcece3',ink:'#1f6b4a',glyph:'\u2713'},unavailable:{bg:'#e7e4de',ink:'#6b665c',glyph:'\u00D7'},maybe:{bg:'#fbe7cf',ink:'#a15f1e',glyph:'?'},unset:{bg:'#ffffff',ink:'#b3ada0',glyph:'',border:'#e5e1d8'}}},
+        dark:{bg:'#1c1b18',surface:'#262420',ink:'#f2efe8',inkMuted:'#948e80',border:'#3a372f',accent:'#4fa39c',
+          status:{available:{bg:'#1f3327',ink:'#8fd3ae',glyph:'\u2713'},unavailable:{bg:'#2b2924',ink:'#a9a397',glyph:'\u00D7'},maybe:{bg:'#3c2c17',ink:'#e8ab6a',glyph:'?'},unset:{bg:'transparent',ink:'#6f6a5d',glyph:'',border:'#3a372f'}}}
+      }
+    };
+    const heatHues = {a:152, b:88, c:165};
+    return {...P[key][theme], theme, heatHue: heatHues[key]};
+  }
+
+  heatColor(score, theme, hue){
+    const level = Math.max(0, Math.min(6, Math.round(score)));
+    let sat, light;
+    if (theme === 'light'){ sat = 35+level*7; light = 94-level*10; }
+    else { sat = 30+level*8; light = 14+level*7; }
+    const bg = `hsl(${hue} ${sat}% ${light}%)`;
+    const ink = theme==='light' ? (level>=4?'#132015':'#1c2a1e') : (level>=3?'#0e150f':'#e9f3ea');
+    return {bg, ink};
+  }
+  hatchImg(theme){
+    const c = theme==='light' ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.10)';
+    return `repeating-linear-gradient(45deg, ${c} 0 2px, transparent 2px 6px)`;
+  }
+
+  rosterVM(key, pal){
+    const picked = this.state.entryPicked[key];
+    return ROSTER.map(m=>{
+      const isPicked = picked === m.name;
+      return {
+        name: m.name, initials: m.initials, tag: m.admin ? 'Admin' : '',
+        onClick: ()=>this.pickName(key, m.name),
+        bgC: isPicked ? pal.status.available.bg : pal.surface,
+        inkC: isPicked ? pal.status.available.ink : pal.ink,
+        borderC: isPicked ? pal.accent : pal.border
+      };
+    });
+  }
+
+  markCell(key, d, pal){
+    if (!d) return {blank:true, show:false};
+    const status = this.state.myMarks[key][d] || 'unset';
+    const st = pal.status[status];
+    const selected = (this.state.bulkSel[key]||[]).includes(d);
+    const dow = new Date(2026,9,d).getDay();
+    const weekIdx = Math.floor((d + new Date(2026,9,1).getDay() - 1) / 7);
+    const weekStart = 1 - new Date(2026,9,1).getDay() + weekIdx*7;
+    const label = status==='unset' ? 'Not answered' : status[0].toUpperCase()+status.slice(1);
+    return {
+      blank:false, show:true, day:d, status, glyph: st.glyph,
+      bg: st.bg, ink: st.ink, dayInk: pal.inkMuted,
+      border: selected ? pal.accent : (st.border || pal.border),
+      wd: WD_SHORT[dow], statusLabel: label,
+      weekLabel: `Week of Oct ${Math.max(1,weekStart)}`,
+      onClick: this.state.bulkMode[key] ? (()=>this.toggleBulkSel(key,d)) : (()=>this.cycleMark(key,d))
+    };
+  }
+
+  reportCell(key, d, pal){
+    if (!d) return {blank:true, show:false};
+    const code = REPORT_CODES[d-1];
+    const stats = computeStats(code);
+    const heat = this.heatColor(stats.score, pal.theme, pal.heatHue);
+    const dow = new Date(2026,9,d).getDay();
+    const selected = this.state.selectedDay[key] === d;
+    const pips = ROSTER.map((m,i)=>({initials:m.initials, st: pal.status[CHARMAP[code[i]]]}));
+    return {
+      blank:false, show:true, day:d, wd: WD_SHORT[dow],
+      scoreLabel: fmtScore(stats.score),
+      bg: heat.bg, ink: heat.ink,
+      hasSilent: stats.silent>0, silentTag: stats.silent>0 ? ('+'+stats.silent) : '',
+      hatchImg: stats.silent>0 ? this.hatchImg(pal.theme) : 'none',
+      selected, selBorder: selected ? pal.accent : 'transparent',
+      pips,
+      onClick: ()=>this.selectDay(key,d)
+    };
+  }
+
+  detailVM(key, pal){
+    const d = this.state.selectedDay[key];
+    const code = REPORT_CODES[d-1];
+    const members = ROSTER.map((m,i)=>{
+      const status = CHARMAP[code[i]];
+      return {name: m.name, st: pal.status[status]};
+    });
+    const dateLabel = new Date(2026,9,d).toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
+    return {dateLabel, members};
+  }
+
+  legendVM(pal){
+    return [0,1,2,3,4,5,6].map(l=>{
+      const heat = this.heatColor(l, pal.theme, pal.heatHue);
+      return {level:l, bg:heat.bg, ink:heat.ink, label: l+'/6 available', hatchImg: this.hatchImg(pal.theme)};
+    });
+  }
+
+  bestVM(list, theme, hue){
+    return list.map(e=>{
+      const heat = this.heatColor(e.score, theme, hue);
+      return {...e, bg: heat.bg, ink: heat.ink, scoreLabel: fmtScore(e.score)};
+    });
+  }
+
+  weekLabelFor(week){
+    const firstDay = week.find(d=>d);
+    if (!firstDay) return '';
+    const weekStart = firstDay - week.findIndex(d=>d===firstDay);
+    return `Week of Oct ${Math.max(1,weekStart)}`;
+  }
+
+  buildApproach(key){
+    const theme = this.state.theme[key];
+    const pal = this.palette(key, theme);
+    const weeksMark = this.monthGrid.map(week => ({label: this.weekLabelFor(week), cells: week.map(d => this.markCell(key, d, pal))}));
+    const weeksReport = this.monthGrid.map(week => ({label: this.weekLabelFor(week), cells: week.map(d => this.reportCell(key, d, pal))}));
+    const bulkOn = this.state.bulkMode[key];
+    return {
+      theme, pal,
+      roster: this.rosterVM(key, pal),
+      weekdayLabels: WD_SHORT,
+      weeksMark, weeksReport,
+      detail: this.detailVM(key, pal),
+      legend: this.legendVM(pal),
+      bestGig: this.bestVM(BEST_GIG, theme, pal.heatHue),
+      bestPractice: this.bestVM(BEST_PRACTICE, theme, pal.heatHue),
+      passcodeDots: ['\u2022','\u2022','\u2022','\u2022'],
+      bulkOn, bulkCount: (this.state.bulkSel[key]||[]).length,
+      bulkLabel: bulkOn ? `Apply to ${(this.state.bulkSel[key]||[]).length}` : 'Select multiple',
+      toggleTheme: ()=>this.toggleTheme(key),
+      toggleBulk: ()=>this.toggleBulkMode(key),
+      markRest: ()=>this.markRestOfMonth(key),
+      applyAvail: ()=>this.applyBulk(key,'available'),
+      applyUnavail: ()=>this.applyBulk(key,'unavailable'),
+      applyMaybe: ()=>this.applyBulk(key,'maybe')
+    };
+  }
+
+  renderVals(){
+    return { a: this.buildApproach('a'), b: this.buildApproach('b'), c: this.buildApproach('c') };
+  }
+}
+
+</script>
+</body>
+</html>
