@@ -75,7 +75,7 @@ function Section({
   empty: string;
 }) {
   return (
-    <section className="mt-4 first:mt-0">
+    <section className="mt-4 first:mt-0 desk:mt-0">
       <h3 className="font-body text-[11px] font-bold tracking-wide text-ink-muted">{title}</h3>
       {dates.length === 0 ? (
         <p className="mt-2 font-body text-[12px] text-ink-muted">{empty}</p>
@@ -122,25 +122,33 @@ export function BestDatesScreen({
         Next six months, best first. A maybe counts as half.
       </p>
 
-      <Section
-        title="🎸 GIGS · FRI–SUN"
-        dates={best.gig}
-        today={today}
-        theme={theme}
-        bandSize={roster.length}
-        emphasised
-        empty="Nobody has marked a Friday, Saturday or Sunday yet."
-      />
+      {/*
+        Side by side on desktop: gigs and practices are read for different
+        reasons, and stacking them means scrolling past six gig dates to reach
+        the first weeknight. Still stacked on mobile, where two columns of
+        arm's-length numerals would not fit.
+      */}
+      <div className="mt-4 desk:grid desk:grid-cols-2 desk:gap-6">
+        <Section
+          title="🎸 GIGS · FRI–SUN"
+          dates={best.gig}
+          today={today}
+          theme={theme}
+          bandSize={roster.length}
+          emphasised
+          empty="Nobody has marked a Friday, Saturday or Sunday yet."
+        />
 
-      <Section
-        title="🥁 PRACTICE · MON–THU"
-        dates={best.practice}
-        today={today}
-        theme={theme}
-        bandSize={roster.length}
-        emphasised={false}
-        empty="Nobody has marked a weeknight yet."
-      />
+        <Section
+          title="🥁 PRACTICE · MON–THU"
+          dates={best.practice}
+          today={today}
+          theme={theme}
+          bandSize={roster.length}
+          emphasised={false}
+          empty="Nobody has marked a weeknight yet."
+        />
+      </div>
     </Card>
   );
 }

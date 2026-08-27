@@ -71,9 +71,7 @@ function Preview() {
         theme={theme}
         today={TODAY}
       />
-      {/* Same width cap the app applies, so this page shows what ships. */}
       <BestDatesScreen
-        className="desk:mx-auto desk:max-w-[560px]"
         roster={ROSTER}
         index={index}
         theme={theme}

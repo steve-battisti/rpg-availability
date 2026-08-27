@@ -173,9 +173,11 @@ The design's desktop breakpoint is 1040px, so it is a named token
 - **Mark Availability** puts the month nav and both actions on one line, with
   the long month label and the name of whose calendar is open. Cells 66px tall,
   9px gaps, 22px glyphs.
-- **Best Dates stays at mobile width**, centred. The design draws it at 390 only,
-  and stretching six cards across 1040px would make it harder to read aloud —
-  which is the entire job of that screen.
+- **Best Dates is two columns on desktop** — gigs left, practice right — at
+  Steve's direction, overriding an earlier call to hold it at mobile width. The
+  reason his version is better: stacked, you scroll past six gig dates to reach
+  the first weeknight, and the two lists get read for different reasons. Still
+  stacked on mobile, where two columns of arm's-length numerals will not fit.
 
 Mobile is unchanged except for one improvement the desktop work surfaced: the
 action buttons now sit directly under the month nav, which is what the mobile

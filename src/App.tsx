@@ -126,11 +126,7 @@ export function App() {
           ) : null}
 
           {tab === 'best' ? (
-            /* The design draws Best Dates at mobile width only; stretching a
-               list of six cards across 1040px would only make it harder to
-               read aloud, which is the screen's whole job. */
             <BestDatesScreen
-              className="desk:mx-auto desk:max-w-[560px]"
               roster={band.roster}
               index={band.index}
               theme={theme}
