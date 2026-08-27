@@ -25,8 +25,10 @@ any given date, and the app calls out the best upcoming dates to book a gig
    Show the month grid, the state affordance, and month navigation.
 3. **Availability Report** — the same month, but each date is heat-coded by how
    many of the six are available (all six = strongest, then 1 missing, 2
-   missing, …). Include the **selected-date detail** state: who is available,
-   who is out, who said maybe.
+   missing, …). A Maybe counts as half. Dates also need to show how many
+   members simply **haven't answered** — a date with 3 yes / 3 unknown must not
+   look like a date with 3 yes / 3 no. Include the **selected-date detail**
+   state: who is available, who is out, who said maybe, who is silent.
 4. **Best Dates** — a highlighted panel listing top **gig dates** (Fri/Sat/Sun)
    and top **practice dates** (Mon–Thu) over the next six months. This is the
    screen someone reads aloud on the phone, so the date and the count have to
@@ -41,6 +43,14 @@ screens at **desktop** too.
   cells must be comfortably tappable and reachable one-handed.
 - **Marking a date is the highest-frequency action.** A member sweeping through
   a month should not need a modal per date.
+- **Bulk marking is required.** An unmarked date means "no answer" and counts
+  for nothing, so a member saying "I'm free all October" must not have to tap
+  31 cells. Design a fast path: drag across a run of days, tap a week row, a
+  "mark the rest of this month" action — your call, but it has to exist and it
+  has to work with a thumb.
+- **Unset is the most common state, not an edge case.** Most cells are unset
+  most of the time. It must read as calm and empty — never as an error or a
+  warning — while still being obviously different from Unavailable.
 - **Do not encode availability in color alone.** Red/green is the most common
   form of color blindness and this app's core signal is a green scale. Every
   heat level also needs a non-color cue — a numeral, a fill pattern, a shape,

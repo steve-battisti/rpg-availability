@@ -1,6 +1,6 @@
 # Tech proposal — Red Planet Groove Availability
 
-Status: **proposed, not accepted.** Decisions marked ❓ are open (see plan).
+Status: **stack proposed; the four product decisions below are settled (2026-08-27).**
 
 ## Stack
 
@@ -46,8 +46,9 @@ availability(member_id uuid, day date, status enum('available','unavailable','ma
              updated_at timestamptz, primary key (member_id, day))
 ```
 
-Only non-default rows are stored. ❓ What "default" means for an unmarked date is
-an open question — it decides whether the report starts full or empty.
+Only marked days have rows. **A missing row means "no answer", not "available"** —
+it contributes 0 to every score and is surfaced as an explicit unknown count.
+This makes bulk-marking a first-class UI requirement, not a nicety.
 
 ## Scoring — best gig / practice dates
 
@@ -60,5 +61,6 @@ practice days = day-of-week ∈ {Mon, Tue, Wed, Thu}
 rank by score desc, then date asc
 ```
 
-❓ `MAYBE_WEIGHT` and ❓ whether any member is *required* (a date without the
-drummer being dead regardless of count) are open questions.
+`MAYBE_WEIGHT = 0.5` — settled. **No member is required**: a date is ranked by
+count, never disqualified by whose name is missing. Every ranked date also
+carries `unknownCount` so a thinly-answered date cannot masquerade as a strong one.
