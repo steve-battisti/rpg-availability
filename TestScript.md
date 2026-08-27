@@ -14,14 +14,18 @@ moves, and a script naming 17 October rots the moment October passes.
 1. Open the app on a phone you have never used it on.
 2. **Expect:** the Entry screen, with the wordmark, four code boxes and six name
    pills.
-3. Tap the code boxes. **Expect:** a numeric keypad, not a full keyboard.
-4. Tap a name *without* entering the code. **Expect:** "Enter the mission code
+3. **Expect:** the cursor is already in the code field — start typing without
+   tapping anything.
+4. Tap the code boxes. **Expect:** a numeric keypad, not a full keyboard.
+5. Tap a name *without* entering the code. **Expect:** "Enter the mission code
    first." — and you stay on Entry.
-5. Enter a wrong code, tap your name. **Expect:** "That code isn't right." and
-   the boxes clear.
-6. Enter the real code, tap your name. **Expect:** you land on Mark Availability,
+6. Enter a wrong code, tap your name. **Expect:** "That code isn't right." and
+   the boxes clear. If you instead see "Something went wrong" or "Couldn't reach
+   the server", the browser is not reaching the claim function — that is a CORS
+   or network fault, not a wrong passcode.
+7. Enter the real code, tap your name. **Expect:** you land on Mark Availability,
    and the footer reads "Signed in as *you*".
-7. Close the browser completely, reopen the app. **Expect:** straight to the
+8. Close the browser completely, reopen the app. **Expect:** straight to the
    calendar, no code, no name picker.
 
 ## T2 — Marking a month one-handed

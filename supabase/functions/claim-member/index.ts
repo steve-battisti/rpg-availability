@@ -21,10 +21,22 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 const MAX_FAILURES = 8;
 const WINDOW_MINUTES = 15;
 
+/**
+ * These must list every header the supabase-js client actually sends, not just
+ * the ones this function reads. A browser preflight that asks for a header not
+ * named here is rejected before the request is ever sent, and the failure looks
+ * like a generic server error from the client side.
+ *
+ * `x-client-info` and `apikey` are added by supabase-js on every call. Missing
+ * them broke browser claims while a Node-based check passed, because Node does
+ * not do preflight at all.
+ */
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type, x-supabase-api-version',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Max-Age': '86400',
 };
 
 function json(body: unknown, status = 200): Response {

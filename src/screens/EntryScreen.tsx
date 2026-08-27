@@ -17,6 +17,7 @@ const FAILURE_COPY: Record<ClaimFailure, string> = {
   unknown_member: 'That name is not on the roster.',
   too_many_attempts: 'Too many tries. Give it fifteen minutes.',
   not_signed_in: 'Lost the connection. Reload and try again.',
+  unreachable: "Couldn't reach the server. Check your connection and try again.",
   server_error: 'Something went wrong. Try again in a moment.',
 };
 
@@ -81,6 +82,9 @@ export function EntryScreen({
           inputMode="numeric"
           autoComplete="one-time-code"
           maxLength={CODE_LENGTH}
+          // The first thing anyone does here is type the code, so put the
+          // cursor in it rather than making them tap the boxes first.
+          autoFocus
           value={code}
           onChange={(e) => {
             setCode(e.target.value.replace(/\D/g, '').slice(0, CODE_LENGTH));

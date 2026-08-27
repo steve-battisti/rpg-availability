@@ -109,7 +109,32 @@ check(
   'a client that could read this would see how close it was to lockout',
 );
 
-// --- 6. the edge function is deployed and rejects a wrong passcode -----------
+// --- 6. CORS preflight allows every header supabase-js sends ----------------
+// This check exists because its absence cost a live debugging session: a browser
+// preflight asking for `x-client-info` and `apikey` was rejected, the request
+// never left the browser, and it surfaced as a generic server error. Node does
+// no preflight, so every other check here passed while the app was broken.
+const BROWSER_HEADERS = ['authorization', 'x-client-info', 'apikey', 'content-type'];
+const preflight = await fetch(`${url}/functions/v1/claim-member`, {
+  method: 'OPTIONS',
+  headers: {
+    Origin: 'https://rpg-availability.pages.dev',
+    'Access-Control-Request-Method': 'POST',
+    'Access-Control-Request-Headers': BROWSER_HEADERS.join(', '),
+  },
+});
+const allowed = (preflight.headers.get('access-control-allow-headers') ?? '')
+  .toLowerCase()
+  .split(',')
+  .map((h) => h.trim());
+const missing = BROWSER_HEADERS.filter((h) => !allowed.includes(h));
+check(
+  'CORS preflight allows every header the browser sends',
+  preflight.ok && missing.length === 0,
+  missing.length ? `browser would be blocked on: ${missing.join(', ')}` : allowed.join(', '),
+);
+
+// --- 7. the edge function is deployed and rejects a wrong passcode -----------
 const { error: fnError } = await supabase.functions.invoke('claim-member', {
   body: { passcode: '000000000-deliberately-wrong', memberId: 'steve' },
 });
@@ -120,7 +145,7 @@ check(
   status ? `HTTP ${status}` : (fnError?.message ?? 'no error — it ACCEPTED a wrong passcode'),
 );
 
-// --- 7. it validates the member id too --------------------------------------
+// --- 8. it validates the member id too --------------------------------------
 const { error: unknownMemberError } = await supabase.functions.invoke('claim-member', {
   body: { passcode: 'wrong', memberId: 'former-bass-player' },
 });

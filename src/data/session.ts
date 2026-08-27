@@ -61,6 +61,7 @@ export type ClaimFailure =
   | 'unknown_member'
   | 'too_many_attempts'
   | 'not_signed_in'
+  | 'unreachable'
   | 'server_error';
 
 export type ClaimResult =
@@ -89,6 +90,12 @@ export async function claimMember(passcode: string, memberId: MemberId): Promise
     if (status === 404) return { ok: false, reason: 'unknown_member' };
     if (status === 401) return { ok: false, reason: 'not_signed_in' };
     if (status === 429) return { ok: false, reason: 'too_many_attempts', retryAfterMinutes: 15 };
+
+    // No status at all means the request never completed — the browser blocked
+    // it (CORS), or the network is down. Reporting that as a server error sends
+    // whoever is debugging it looking in entirely the wrong place; it cost a
+    // real debugging session once already.
+    if (status === undefined) return { ok: false, reason: 'unreachable' };
     return { ok: false, reason: 'server_error' };
   }
 

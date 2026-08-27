@@ -102,6 +102,35 @@ Two deployment choices worth recording:
   `nosniff`, a referrer policy, and a locked-down permissions policy; robots
   disallows everything, because this is a private tool for six people.
 
+### Post-deploy fix — 2026-08-27
+
+Steve reported that entering the passcode and picking a name failed with
+"Something went wrong". Two real bugs, one of them serious.
+
+**The CORS allow-list was incomplete.** The function allowed
+`authorization, content-type`; supabase-js also sends `x-client-info` and
+`apikey`. The browser's preflight was rejected, so the claim request never left
+the page — **the app was unusable for every real user** while
+`npm run verify:supabase` reported 8/8, because Node performs no preflight.
+
+The diagnosis came from the data rather than the code: `claim_attempts` held no
+row at all for Steve's attempt, not even a failed one, which proved the function
+never executed and eliminated the whole passcode-and-claim path in a single
+query.
+
+**The client hid the cause.** A request that never completes has no HTTP status,
+and the mapping collapsed that into `server_error` — so a browser-side CORS block
+was reported as a server fault, aiming any debugging at the wrong machine. A
+missing status is now `unreachable`, with its own message.
+
+Both are now covered: `verify:supabase` performs a real preflight asking for the
+exact header set a browser sends, and fails if any is missing. Confirmed
+end-to-end in a headless browser against the live site — a wrong passcode now
+returns a genuine 403 and reads "That code isn't right."
+
+Also fixed: the code field is focused on load, so typing works without tapping
+first.
+
 ### Still owed
 
 - **T1–T9 in `TestScript.md` have not been run.** They need a real phone and, for
