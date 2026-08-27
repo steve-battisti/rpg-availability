@@ -8,3 +8,6 @@ dist/
 *.local
 .DS_Store
 *:Zone.Identifier
+
+# Design source bundle — extracted contents are committed alongside it
+design/**/design_handoff_*.zip
